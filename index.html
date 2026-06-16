@@ -1,0 +1,616 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Avishkar AV — Developer Portfolio</title>
+  <link rel="stylesheet" href="style.css" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet" />
+</head>
+<body>
+
+  <!-- NAV -->
+  <nav id="nav">
+    <div class="nav-inner">
+      <a class="nav-logo" href="#hero">AV<span class="dot">.</span></a>
+      <ul class="nav-links">
+        <li><a href="#projects">Projects</a></li>
+        <li><a href="#experience">Experience</a></li>
+        <li><a href="#skills">Skills</a></li>
+        <li><a href="#contact" class="nav-cta">Contact</a></li>
+      </ul>
+      <button class="hamburger" id="hamburger" aria-label="menu">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+    <div class="mobile-menu" id="mobileMenu">
+      <a href="#projects" onclick="closeMobile()">Projects</a>
+      <a href="#experience" onclick="closeMobile()">Experience</a>
+      <a href="#skills" onclick="closeMobile()">Skills</a>
+      <a href="#contact" onclick="closeMobile()">Contact</a>
+    </div>
+  </nav>
+
+  <!-- HERO -->
+  <section id="hero">
+    <canvas id="stars"></canvas>
+    <div class="hero-content">
+      <p class="hero-tag">👋 Hey there, I'm</p>
+      <h1 class="hero-name">Avishkar AV</h1>
+      <div class="hero-roles">
+        <span class="role-prefix">I build&nbsp;</span>
+        <span class="typewriter" id="typewriter"></span>
+        <span class="cursor">|</span>
+      </div>
+      <p class="hero-bio">
+        Fullstack Developer & ML Enthusiast crafting high-impact software — from AI-powered platforms serving 1,000+ users to tiny games that spark joy.
+      </p>
+      <div class="hero-btns">
+        <a href="#projects" class="btn btn-primary">View Projects</a>
+        <a href="https://linkedin.com/in/avishkarav" target="_blank" class="btn btn-ghost">LinkedIn ↗</a>
+      </div>
+      <div class="hero-stats">
+        <div class="stat"><span class="stat-n">46%</span><span class="stat-l">Infra Cost Cut</span></div>
+        <div class="stat"><span class="stat-n">10s→2s</span><span class="stat-l">Latency Slashed</span></div>
+        <div class="stat"><span class="stat-n">3</span><span class="stat-l">Play Store Apps</span></div>
+        <div class="stat"><span class="stat-n">489</span><span class="stat-l">DB Rows Cleaned</span></div>
+      </div>
+    </div>
+    <div class="scroll-hint">scroll down ↓</div>
+  </section>
+
+  <!-- PROJECTS -->
+  <section id="projects">
+    <div class="section-inner">
+      <div class="section-header">
+        <span class="section-tag">// what I've built</span>
+        <h2>Projects</h2>
+        <p class="section-sub">From production systems to weekend experiments — games, AI tools, and automation scripts.</p>
+      </div>
+
+      <div class="filter-bar">
+        <button class="filter-btn active" data-filter="all">All</button>
+        <button class="filter-btn" data-filter="game">🎮 Games</button>
+        <button class="filter-btn" data-filter="ai">🤖 AI / ML</button>
+        <button class="filter-btn" data-filter="automation">⚡ Automation</button>
+        <button class="filter-btn" data-filter="fullstack">🌐 Fullstack</button>
+      </div>
+
+      <div class="projects-grid" id="projectsGrid">
+
+        <!-- SNAKE GAME -->
+        <div class="project-card featured" data-cat="game">
+          <div class="card-glow"></div>
+          <div class="card-top">
+            <span class="card-emoji">🐍</span>
+            <div class="card-badges">
+              <span class="badge badge-green">Python</span>
+              <span class="badge badge-purple">Turtle</span>
+            </div>
+          </div>
+          <h3>Snake Game</h3>
+          <p>Classic Snake built from scratch in Python using Turtle graphics. Features collision detection, growing tail mechanics, and a real-time scoreboard with high-score persistence via file I/O.</p>
+          <div class="card-tags">OOP · Collision Detection · File I/O</div>
+          <div class="card-links">
+            <a href="https://github.com/Avishkarav4" target="_blank" class="card-link">GitHub ↗</a>
+          </div>
+        </div>
+
+        <!-- PONG GAME -->
+        <div class="project-card featured" data-cat="game">
+          <div class="card-glow"></div>
+          <div class="card-top">
+            <span class="card-emoji">🏓</span>
+            <div class="card-badges">
+              <span class="badge badge-green">Python</span>
+              <span class="badge badge-purple">Turtle</span>
+            </div>
+          </div>
+          <h3>Pong Game</h3>
+          <p>Two-player Pong recreation with paddle physics, ball speed acceleration, and live scoring. Built with a clean OOP architecture — Ball, Paddle, and Scoreboard are independent classes.</p>
+          <div class="card-tags">OOP · Physics · Multiplayer</div>
+          <div class="card-links">
+            <a href="https://github.com/Avishkarav4" target="_blank" class="card-link">GitHub ↗</a>
+          </div>
+        </div>
+
+        <!-- US STATES GAME -->
+        <div class="project-card featured" data-cat="game">
+          <div class="card-glow"></div>
+          <div class="card-top">
+            <span class="card-emoji">🗺️</span>
+            <div class="card-badges">
+              <span class="badge badge-green">Python</span>
+              <span class="badge badge-blue">Pandas</span>
+            </div>
+          </div>
+          <h3>US States Quiz Game</h3>
+          <p>Interactive geography quiz — guess all 50 US states and they appear on a map. Incorrect answers get saved to a CSV "states-to-learn" list for spaced-repetition practice.</p>
+          <div class="card-tags">Pandas · CSV · Educational</div>
+          <div class="card-links">
+            <a href="https://github.com/Avishkarav4" target="_blank" class="card-link">GitHub ↗</a>
+          </div>
+        </div>
+
+        <!-- HIRST PAINTING -->
+        <div class="project-card" data-cat="game">
+          <div class="card-glow"></div>
+          <div class="card-top">
+            <span class="card-emoji">🎨</span>
+            <div class="card-badges">
+              <span class="badge badge-green">Python</span>
+              <span class="badge badge-yellow">Turtle</span>
+            </div>
+          </div>
+          <h3>Hirst Painting Generator</h3>
+          <p>Generative art inspired by Damien Hirst's famous dot paintings. Extracts a real color palette from an image and randomly plots hundreds of colored dots in a perfect grid.</p>
+          <div class="card-tags">Generative Art · colorgram · Creative</div>
+          <div class="card-links">
+            <a href="https://github.com/Avishkarav4" target="_blank" class="card-link">GitHub ↗</a>
+          </div>
+        </div>
+
+        <!-- RAG STUDY PLANNER -->
+        <div class="project-card featured" data-cat="ai">
+          <div class="card-glow glow-purple"></div>
+          <div class="card-top">
+            <span class="card-emoji">🤖</span>
+            <div class="card-badges">
+              <span class="badge badge-purple">FastAPI</span>
+              <span class="badge badge-blue">RAG</span>
+              <span class="badge badge-green">Python</span>
+            </div>
+          </div>
+          <h3>RAG Study Planner</h3>
+          <p>Upload lecture notes & past question papers — the system builds a vector store, retrieves relevant context, and answers your study queries. Includes topic categorization and frequency analysis from past papers.</p>
+          <div class="card-tags">RAG · FastAPI · Vector Search · LLM</div>
+          <div class="card-links">
+            <a href="https://github.com/Avishkarav4" target="_blank" class="card-link">GitHub ↗</a>
+          </div>
+        </div>
+
+        <!-- SMART ATTENDANCE -->
+        <div class="project-card featured" data-cat="ai">
+          <div class="card-glow glow-purple"></div>
+          <div class="card-top">
+            <span class="card-emoji">📸</span>
+            <div class="card-badges">
+              <span class="badge badge-green">Python</span>
+              <span class="badge badge-blue">OpenCV</span>
+            </div>
+          </div>
+          <h3>Smart Attendance System</h3>
+          <p>Real-time facial recognition via CCTV feeds that auto-marks attendance to a CSV — completely replacing manual roll calls. Built with OpenCV and NumPy for a fast, low-latency pipeline.</p>
+          <div class="card-tags">OpenCV · NumPy · Face Recognition · CSV</div>
+          <div class="card-links">
+            <a href="https://github.com/Avishkarav4/Smart-Attendance" target="_blank" class="card-link">GitHub ↗</a>
+          </div>
+        </div>
+
+        <!-- IMAGE OBJECT DETECTION -->
+        <div class="project-card" data-cat="ai">
+          <div class="card-glow glow-purple"></div>
+          <div class="card-top">
+            <span class="card-emoji">🔍</span>
+            <div class="card-badges">
+              <span class="badge badge-green">Python</span>
+              <span class="badge badge-blue">ML</span>
+            </div>
+          </div>
+          <h3>Image Object Detection</h3>
+          <p>Experimental object detection pipeline that identifies and labels objects within images. A hands-on exploration of computer vision models and bounding-box annotation.</p>
+          <div class="card-tags">Computer Vision · Object Detection · ML</div>
+          <div class="card-links">
+            <a href="https://github.com/Avishkarav4" target="_blank" class="card-link">GitHub ↗</a>
+          </div>
+        </div>
+
+        <!-- SIGN LANGUAGE -->
+        <div class="project-card" data-cat="ai">
+          <div class="card-glow glow-purple"></div>
+          <div class="card-top">
+            <span class="card-emoji">🤟</span>
+            <div class="card-badges">
+              <span class="badge badge-green">Python</span>
+              <span class="badge badge-yellow">NumPy</span>
+            </div>
+          </div>
+          <h3>Sign Language Translator</h3>
+          <p>Real-time gesture-to-text translation. An ML pipeline with heavy data augmentation improved model generalization significantly, enabling accurate sign recognition from live video.</p>
+          <div class="card-tags">ML · Data Augmentation · Real-Time · Accessibility</div>
+          <div class="card-links">
+            <a href="https://github.com/Avishkarav4" target="_blank" class="card-link">GitHub ↗</a>
+          </div>
+        </div>
+
+        <!-- RAIN ALERT -->
+        <div class="project-card featured" data-cat="automation">
+          <div class="card-glow glow-blue"></div>
+          <div class="card-top">
+            <span class="card-emoji">☔</span>
+            <div class="card-badges">
+              <span class="badge badge-green">Python</span>
+              <span class="badge badge-blue">Twilio</span>
+            </div>
+          </div>
+          <h3>Rain Alert SMS Bot</h3>
+          <p>Wakes up every morning, checks OpenWeatherMap for the next 12 hours, and fires an SMS via Twilio if rain is detected — so you never forget your umbrella. Runs on a cron-triggered server.</p>
+          <div class="card-tags">OpenWeatherMap API · Twilio · Automation</div>
+          <div class="card-links">
+            <a href="https://github.com/Avishkarav4" target="_blank" class="card-link">GitHub ↗</a>
+          </div>
+        </div>
+
+        <!-- STOCK NEWS -->
+        <div class="project-card" data-cat="automation">
+          <div class="card-glow glow-blue"></div>
+          <div class="card-top">
+            <span class="card-emoji">📈</span>
+            <div class="card-badges">
+              <span class="badge badge-green">Python</span>
+              <span class="badge badge-blue">APIs</span>
+            </div>
+          </div>
+          <h3>Stock News Alert</h3>
+          <p>Monitors stock price movements and fires SMS alerts with relevant news headlines whenever a ticker moves by a set threshold — combining Alpha Vantage, NewsAPI, and Twilio.</p>
+          <div class="card-tags">Alpha Vantage · NewsAPI · Twilio · Finance</div>
+          <div class="card-links">
+            <a href="https://github.com/Avishkarav4" target="_blank" class="card-link">GitHub ↗</a>
+          </div>
+        </div>
+
+        <!-- BIRTHDAY WISHER -->
+        <div class="project-card" data-cat="automation">
+          <div class="card-glow glow-blue"></div>
+          <div class="card-top">
+            <span class="card-emoji">🎂</span>
+            <div class="card-badges">
+              <span class="badge badge-green">Python</span>
+              <span class="badge badge-yellow">SMTP</span>
+            </div>
+          </div>
+          <h3>Birthday Wisher</h3>
+          <p>Reads a CSV of birthdays, picks a random letter template, and auto-sends a personalised email on the correct day. Because forgetting a birthday is unacceptable.</p>
+          <div class="card-tags">SMTP · CSV · Scheduling · Automation</div>
+          <div class="card-links">
+            <a href="https://github.com/Avishkarav4" target="_blank" class="card-link">GitHub ↗</a>
+          </div>
+        </div>
+
+        <!-- POMODORO -->
+        <div class="project-card" data-cat="automation">
+          <div class="card-glow glow-blue"></div>
+          <div class="card-top">
+            <span class="card-emoji">🍅</span>
+            <div class="card-badges">
+              <span class="badge badge-green">Python</span>
+              <span class="badge badge-purple">Tkinter</span>
+            </div>
+          </div>
+          <h3>Pomodoro Timer</h3>
+          <p>GUI Pomodoro productivity timer with configurable work/break intervals, visual checkmarks for completed sessions, and an auto-reset mechanism. Built with Python's Tkinter.</p>
+          <div class="card-tags">Tkinter · GUI · Productivity</div>
+          <div class="card-links">
+            <a href="https://github.com/Avishkarav4" target="_blank" class="card-link">GitHub ↗</a>
+          </div>
+        </div>
+
+        <!-- ISS TRACKER -->
+        <div class="project-card" data-cat="automation">
+          <div class="card-glow glow-blue"></div>
+          <div class="card-top">
+            <span class="card-emoji">🛸</span>
+            <div class="card-badges">
+              <span class="badge badge-green">Python</span>
+              <span class="badge badge-blue">API</span>
+            </div>
+          </div>
+          <h3>ISS Overhead Tracker</h3>
+          <p>Notifies you by email when the International Space Station is passing overhead at night — combining the Open Notify API with your current coordinates for a real-time sky alert.</p>
+          <div class="card-tags">ISS API · Astronomy · Alerts · Python</div>
+          <div class="card-links">
+            <a href="https://github.com/Avishkarav4" target="_blank" class="card-link">GitHub ↗</a>
+          </div>
+        </div>
+
+        <!-- WORKOUT TRACKER -->
+        <div class="project-card" data-cat="automation">
+          <div class="card-glow glow-blue"></div>
+          <div class="card-top">
+            <span class="card-emoji">💪</span>
+            <div class="card-badges">
+              <span class="badge badge-green">Python</span>
+              <span class="badge badge-yellow">Sheety</span>
+            </div>
+          </div>
+          <h3>Workout Tracker</h3>
+          <p>Tell the app what exercise you did in plain English — it uses the Nutritionix NLP API to calculate calories burned, then logs the data to a Google Sheet via Sheety API.</p>
+          <div class="card-tags">NLP · Google Sheets · Nutritionix · Health</div>
+          <div class="card-links">
+            <a href="https://github.com/Avishkarav4" target="_blank" class="card-link">GitHub ↗</a>
+          </div>
+        </div>
+
+        <!-- PASSWORD MANAGER -->
+        <div class="project-card" data-cat="automation">
+          <div class="card-glow glow-blue"></div>
+          <div class="card-top">
+            <span class="card-emoji">🔐</span>
+            <div class="card-badges">
+              <span class="badge badge-green">Python</span>
+              <span class="badge badge-purple">Tkinter</span>
+            </div>
+          </div>
+          <h3>Password Manager</h3>
+          <p>Desktop GUI password manager that generates secure random passwords, saves them per-site to a local JSON file, and supports instant clipboard copy for any stored credential.</p>
+          <div class="card-tags">Tkinter · JSON · Security · GUI</div>
+          <div class="card-links">
+            <a href="https://github.com/Avishkarav4" target="_blank" class="card-link">GitHub ↗</a>
+          </div>
+        </div>
+
+        <!-- PASSITON -->
+        <div class="project-card featured" data-cat="fullstack">
+          <div class="card-glow glow-green"></div>
+          <div class="card-top">
+            <span class="card-emoji">♻️</span>
+            <div class="card-badges">
+              <span class="badge badge-blue">GCP</span>
+              <span class="badge badge-purple">Vertex AI</span>
+              <span class="badge badge-yellow">Redis</span>
+            </div>
+          </div>
+          <h3>Passiton — Freecycling Marketplace</h3>
+          <p>Production marketplace for 1,000+ users on GCP Cloud Run. Vertex AI retry loop cut API failures from 33% → 3%. Redis feed algo slashed load latency from 10s → &lt;2s. OpenStreetMap integration eliminated mapping API costs.</p>
+          <div class="card-tags">GCP · Redis · Vertex AI · OSM · PostgreSQL</div>
+          <div class="card-links">
+            <span class="card-link-muted">Private — Production</span>
+          </div>
+        </div>
+
+        <!-- BLUEDOT -->
+        <div class="project-card" data-cat="fullstack">
+          <div class="card-glow glow-green"></div>
+          <div class="card-top">
+            <span class="card-emoji">💙</span>
+            <div class="card-badges">
+              <span class="badge badge-blue">TypeScript</span>
+              <span class="badge badge-purple">PostgreSQL</span>
+            </div>
+          </div>
+          <h3>bluedot.ngo</h3>
+          <p>End-to-end architecture for a centralized NGO donation management portal. Designed to handle enterprise-level charity campaigns with multi-org support and large-scale donor coordination.</p>
+          <div class="card-tags">System Design · NGO · Fullstack · Multi-tenant</div>
+          <div class="card-links">
+            <span class="card-link-muted">Private — Production</span>
+          </div>
+        </div>
+
+        <!-- FLASHCARDS -->
+        <div class="project-card" data-cat="game">
+          <div class="card-glow"></div>
+          <div class="card-top">
+            <span class="card-emoji">🗂️</span>
+            <div class="card-badges">
+              <span class="badge badge-green">Python</span>
+              <span class="badge badge-purple">Tkinter</span>
+            </div>
+          </div>
+          <h3>French Flashcard App</h3>
+          <p>Spaced-repetition flashcard app for learning French vocab. Flip cards reveal the translation; marking known/unknown dynamically updates the word list so you only drill what you haven't mastered.</p>
+          <div class="card-tags">Tkinter · Pandas · Spaced Repetition</div>
+          <div class="card-links">
+            <a href="https://github.com/Avishkarav4" target="_blank" class="card-link">GitHub ↗</a>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- EXPERIENCE -->
+  <section id="experience">
+    <div class="section-inner">
+      <div class="section-header">
+        <span class="section-tag">// where I've worked</span>
+        <h2>Experience</h2>
+      </div>
+      <div class="timeline">
+
+        <div class="tl-item">
+          <div class="tl-dot"></div>
+          <div class="tl-content">
+            <div class="tl-header">
+              <div>
+                <h3 class="tl-role">Fullstack Developer Intern</h3>
+                <p class="tl-company">Third Eye Creative</p>
+              </div>
+              <span class="tl-date">Dec 2025 – Present</span>
+            </div>
+            <ul class="tl-bullets">
+              <li>Architected <strong>Passiton</strong> freecycling marketplace for 1,000+ users on GCP Cloud Run with full QA lifecycle.</li>
+              <li>Built Vertex AI retry loop cutting API failures <strong>33% → 3%</strong>; Redis feed algo slashing load time <strong>10s → &lt;2s</strong>.</li>
+              <li>Designed end-to-end system architecture for <strong>bluedot.ngo</strong>, an enterprise NGO donation platform.</li>
+              <li>Zero-downtime PostgreSQL cleanup of 489 "poison pill" rows — DB shrank <strong>2GB → 800MB</strong>, join queries <strong>40% faster</strong>.</li>
+              <li>Multi-tenant CI/CD pipeline (GitHub Actions + Docker Hub) automating <strong>3 Play Store apps</strong>.</li>
+              <li>Slashed infrastructure costs <strong>46%</strong> by migrating AWS EC2 → DigitalOcean + Docker containerisation.</li>
+            </ul>
+            <div class="tl-stack">GCP · Vertex AI · Redis · PostgreSQL · Docker · GitHub Actions · DigitalOcean</div>
+          </div>
+        </div>
+
+        <div class="tl-item">
+          <div class="tl-dot"></div>
+          <div class="tl-content">
+            <div class="tl-header">
+              <div>
+                <h3 class="tl-role">Fullstack Developer Intern</h3>
+                <p class="tl-company">EarthlyExotica</p>
+              </div>
+              <span class="tl-date">Jan 2025 – May 2025</span>
+            </div>
+            <ul class="tl-bullets">
+              <li>Engineered mobile-responsive Flutter architecture for <strong>baadige.com</strong> with modular component design.</li>
+              <li>Integrated core REST APIs and leveraged AI productivity frameworks to streamline debugging workflows.</li>
+            </ul>
+            <div class="tl-stack">Flutter · Dart · REST APIs</div>
+          </div>
+        </div>
+
+        <div class="tl-item">
+          <div class="tl-dot"></div>
+          <div class="tl-content">
+            <div class="tl-header">
+              <div>
+                <h3 class="tl-role">Machine Learning Intern</h3>
+                <p class="tl-company">Suven Consultant and Technology Pvt. Ltd.</p>
+              </div>
+              <span class="tl-date">Oct 2023 – Dec 2023</span>
+            </div>
+            <ul class="tl-bullets">
+              <li>Built high-accuracy ML models using Python & NumPy with robust data preprocessing pipelines for web analytics.</li>
+            </ul>
+            <div class="tl-stack">Python · NumPy · Machine Learning</div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- SKILLS -->
+  <section id="skills">
+    <div class="section-inner">
+      <div class="section-header">
+        <span class="section-tag">// toolkit</span>
+        <h2>Skills</h2>
+      </div>
+      <div class="skills-grid">
+        <div class="skill-group">
+          <h4>Languages</h4>
+          <div class="skill-pills">
+            <span class="pill">Python</span>
+            <span class="pill">TypeScript</span>
+            <span class="pill">JavaScript</span>
+            <span class="pill">Dart</span>
+            <span class="pill">Kotlin</span>
+            <span class="pill">Java</span>
+            <span class="pill">SQL</span>
+            <span class="pill">HTML/CSS</span>
+          </div>
+        </div>
+        <div class="skill-group">
+          <h4>Cloud &amp; Infra</h4>
+          <div class="skill-pills">
+            <span class="pill pill-blue">GCP Cloud Run</span>
+            <span class="pill pill-blue">Vertex AI</span>
+            <span class="pill pill-blue">DigitalOcean</span>
+            <span class="pill pill-blue">AWS EC2</span>
+            <span class="pill pill-blue">Docker</span>
+            <span class="pill pill-blue">Jenkins</span>
+            <span class="pill pill-blue">Vercel</span>
+            <span class="pill pill-blue">Linux</span>
+          </div>
+        </div>
+        <div class="skill-group">
+          <h4>Databases</h4>
+          <div class="skill-pills">
+            <span class="pill pill-yellow">PostgreSQL</span>
+            <span class="pill pill-yellow">Redis</span>
+            <span class="pill pill-yellow">MySQL</span>
+            <span class="pill pill-yellow">MongoDB</span>
+            <span class="pill pill-yellow">Firebase</span>
+            <span class="pill pill-yellow">Supabase</span>
+            <span class="pill pill-yellow">Neo4j</span>
+          </div>
+        </div>
+        <div class="skill-group">
+          <h4>Tools &amp; ML</h4>
+          <div class="skill-pills">
+            <span class="pill pill-purple">OpenCV</span>
+            <span class="pill pill-purple">NumPy</span>
+            <span class="pill pill-purple">Postman</span>
+            <span class="pill pill-purple">SonarQube</span>
+            <span class="pill pill-purple">Grafana</span>
+            <span class="pill pill-purple">k6</span>
+            <span class="pill pill-purple">Git</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="certs-row">
+        <div class="cert-card">
+          <span class="cert-icon">🏆</span>
+          <div>
+            <p class="cert-title">Oracle Cloud Infrastructure 2025</p>
+            <p class="cert-sub">Certified Generative AI Professional</p>
+          </div>
+        </div>
+        <div class="cert-card">
+          <span class="cert-icon">🏆</span>
+          <div>
+            <p class="cert-title">Oracle OCI AI Foundation</p>
+            <p class="cert-sub">Associate Certification</p>
+          </div>
+        </div>
+        <div class="cert-card">
+          <span class="cert-icon">🏆</span>
+          <div>
+            <p class="cert-title">Java OOP</p>
+            <p class="cert-sub">LinkedIn Learning</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CONTACT -->
+  <section id="contact">
+    <div class="section-inner contact-inner">
+      <div class="section-header">
+        <span class="section-tag">// let's talk</span>
+        <h2>Get In Touch</h2>
+        <p class="section-sub">Open to fullstack & backend roles, freelance projects, and interesting collaborations.</p>
+      </div>
+      <div class="contact-links">
+        <a href="mailto:avishkarav44@gmail.com" class="contact-card">
+          <span class="contact-icon">✉️</span>
+          <div>
+            <p class="contact-label">Email</p>
+            <p class="contact-value">avishkarav44@gmail.com</p>
+          </div>
+        </a>
+        <a href="https://linkedin.com/in/avishkarav" target="_blank" class="contact-card">
+          <span class="contact-icon">💼</span>
+          <div>
+            <p class="contact-label">LinkedIn</p>
+            <p class="contact-value">linkedin.com/in/avishkarav</p>
+          </div>
+        </a>
+        <a href="https://github.com/Avishkarav4" target="_blank" class="contact-card">
+          <span class="contact-icon">🐙</span>
+          <div>
+            <p class="contact-label">GitHub</p>
+            <p class="contact-value">github.com/Avishkarav4</p>
+          </div>
+        </a>
+        <a href="tel:+918904628324" class="contact-card">
+          <span class="contact-icon">📞</span>
+          <div>
+            <p class="contact-label">Phone</p>
+            <p class="contact-value">+91 8904628324</p>
+          </div>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer>
+    <p>Designed & built by <strong>Avishkar AV</strong> · <a href="https://github.com/Avishkarav4" target="_blank">Source on GitHub ↗</a></p>
+  </footer>
+
+  <script src="script.js"></script>
+</body>
+</html>
