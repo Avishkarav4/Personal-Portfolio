@@ -87,13 +87,15 @@
             <div class="card-badges">
               <span class="badge badge-green">Python</span>
               <span class="badge badge-purple">Turtle</span>
+              <span class="badge badge-yellow">JS Port</span>
             </div>
           </div>
           <h3>Snake Game</h3>
-          <p>Classic Snake built from scratch in Python using Turtle graphics. Features collision detection, growing tail mechanics, and a real-time scoreboard with high-score persistence via file I/O.</p>
+          <p>Classic Snake built from scratch. Features collision detection, growing tail mechanics, and a real-time scoreboard with high-score persistence. Now playable right here in the browser!</p>
           <div class="card-tags">OOP · Collision Detection · File I/O</div>
           <div class="card-links">
-            <a href="https://github.com/Avishkarav4" target="_blank" class="card-link">GitHub ↗</a>
+            <button class="btn-play" onclick="openGame('snake')">▶ Play Game</button>
+            <a href="https://github.com/Avishkarav4" target="_blank" class="card-link" style="margin-left:12px">GitHub ↗</a>
           </div>
         </div>
 
@@ -105,13 +107,15 @@
             <div class="card-badges">
               <span class="badge badge-green">Python</span>
               <span class="badge badge-purple">Turtle</span>
+              <span class="badge badge-yellow">JS Port</span>
             </div>
           </div>
           <h3>Pong Game</h3>
-          <p>Two-player Pong recreation with paddle physics, ball speed acceleration, and live scoring. Built with a clean OOP architecture — Ball, Paddle, and Scoreboard are independent classes.</p>
-          <div class="card-tags">OOP · Physics · Multiplayer</div>
+          <p>Two-player Pong with paddle physics and ball speed acceleration. Clean OOP architecture — Ball, Paddle, and Scoreboard are independent classes. Play vs AI right here!</p>
+          <div class="card-tags">OOP · Physics · AI Opponent</div>
           <div class="card-links">
-            <a href="https://github.com/Avishkarav4" target="_blank" class="card-link">GitHub ↗</a>
+            <button class="btn-play" onclick="openGame('pong')">▶ Play Game</button>
+            <a href="https://github.com/Avishkarav4" target="_blank" class="card-link" style="margin-left:12px">GitHub ↗</a>
           </div>
         </div>
 
@@ -610,6 +614,22 @@
   <footer>
     <p>Designed & built by <strong>Avishkar AV</strong> · <a href="https://github.com/Avishkarav4" target="_blank">Source on GitHub ↗</a></p>
   </footer>
+
+  <!-- GAME MODALS -->
+  <div class="game-overlay" id="gameOverlay" onclick="closeGame(event)">
+    <div class="game-modal">
+      <div class="game-modal-header">
+        <span class="game-title" id="gameTitle"></span>
+        <div class="game-controls-hint" id="gameHint"></div>
+        <button class="game-close" onclick="closeGame()">✕</button>
+      </div>
+      <canvas id="gameCanvas"></canvas>
+      <div class="game-footer">
+        <button class="game-restart-btn" id="restartBtn" onclick="restartGame()">↺ Restart</button>
+        <span class="game-score-label">Score: <span id="scoreDisplay">0</span></span>
+      </div>
+    </div>
+  </div>
 
   <script src="script.js"></script>
 </body>
