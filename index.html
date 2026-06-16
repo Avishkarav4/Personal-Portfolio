@@ -127,13 +127,15 @@
             <div class="card-badges">
               <span class="badge badge-green">Python</span>
               <span class="badge badge-blue">Pandas</span>
+              <span class="badge badge-yellow">JS Port</span>
             </div>
           </div>
           <h3>US States Quiz Game</h3>
-          <p>Interactive geography quiz — guess all 50 US states and they appear on a map. Incorrect answers get saved to a CSV "states-to-learn" list for spaced-repetition practice.</p>
-          <div class="card-tags">Pandas · CSV · Educational</div>
+          <p>Can you name all 50 states? Type them and watch them appear on the map — just like the Python original. Missed states are shown in red at the end.</p>
+          <div class="card-tags">Pandas · CSV · Educational · Geography</div>
           <div class="card-links">
-            <a href="https://github.com/Avishkarav4" target="_blank" class="card-link">GitHub ↗</a>
+            <button class="btn-play" onclick="openGame('quiz')">▶ Play Game</button>
+            <a href="https://github.com/Avishkarav4" target="_blank" class="card-link" style="margin-left:12px">GitHub ↗</a>
           </div>
         </div>
 
@@ -624,9 +626,13 @@
         <button class="game-close" onclick="closeGame()">✕</button>
       </div>
       <canvas id="gameCanvas"></canvas>
+      <div class="quiz-input-row" id="quizInputRow" style="display:none">
+        <input type="text" id="quizInput" class="quiz-input" placeholder="Type a US state name…" autocomplete="off" spellcheck="false" />
+        <button class="quiz-giveup-btn" id="quizGiveupBtn" onclick="quizGiveUp()">Give Up</button>
+      </div>
       <div class="game-footer">
         <button class="game-restart-btn" id="restartBtn" onclick="restartGame()">↺ Restart</button>
-        <span class="game-score-label">Score: <span id="scoreDisplay">0</span></span>
+        <span class="game-score-label" id="scoreLabel">Score: <span id="scoreDisplay">0</span></span>
       </div>
     </div>
   </div>

@@ -160,8 +160,11 @@ function openGame(type) {
   overlay.classList.add('open');
   document.body.style.overflow = 'hidden';
   activeGame = type;
+  document.getElementById('quizInputRow').style.display = type === 'quiz' ? 'flex' : 'none';
+  document.getElementById('scoreLabel').innerHTML = 'Score: <span id="scoreDisplay">0</span>';
   if (type === 'snake') initSnake();
-  else initPong();
+  else if (type === 'pong') initPong();
+  else initQuiz();
 }
 
 function closeGame(e) {
@@ -169,13 +172,17 @@ function closeGame(e) {
   overlay.classList.remove('open');
   document.body.style.overflow = '';
   if (gameLoop) { clearInterval(gameLoop); cancelAnimationFrame(gameLoop); gameLoop = null; }
+  if (quizTimer) { clearInterval(quizTimer); quizTimer = null; }
+  document.getElementById('quizInputRow').style.display = 'none';
   activeGame = null;
 }
 
 function restartGame() {
   if (gameLoop) { clearInterval(gameLoop); cancelAnimationFrame(gameLoop); gameLoop = null; }
+  if (quizTimer) { clearInterval(quizTimer); quizTimer = null; }
   if (activeGame === 'snake') initSnake();
   else if (activeGame === 'pong') initPong();
+  else if (activeGame === 'quiz') initQuiz();
 }
 
 // ─── SNAKE ───────────────────────────────────────────────
@@ -403,6 +410,217 @@ function drawPong() {
     gc.font = `bold ${W*0.055}px Inter`; gc.fillText(p.winner, W/2, H/2-12);
     gc.font = `${W*0.03}px Inter`; gc.fillStyle = '#94a3b8';
     gc.fillText('Press ↺ to play again', W/2, H/2+24);
+  }
+}
+
+// ─── US STATES QUIZ ──────────────────────────────────────
+const ALL_STATES = [
+  {name:'Alabama',       abbr:'AL', lat:32.3,  lon:86.9 },
+  {name:'Alaska',        abbr:'AK', lat:64.2,  lon:153.4, special:{x:82, y:388}},
+  {name:'Arizona',       abbr:'AZ', lat:34.3,  lon:111.7},
+  {name:'Arkansas',      abbr:'AR', lat:34.9,  lon:92.4 },
+  {name:'California',    abbr:'CA', lat:36.8,  lon:119.7},
+  {name:'Colorado',      abbr:'CO', lat:39.1,  lon:105.4},
+  {name:'Connecticut',   abbr:'CT', lat:41.6,  lon:72.7 },
+  {name:'Delaware',      abbr:'DE', lat:39.0,  lon:75.5 },
+  {name:'Florida',       abbr:'FL', lat:27.8,  lon:81.5 },
+  {name:'Georgia',       abbr:'GA', lat:32.2,  lon:83.4 },
+  {name:'Hawaii',        abbr:'HI', lat:20.0,  lon:157.0, special:{x:215, y:400}},
+  {name:'Idaho',         abbr:'ID', lat:44.4,  lon:114.5},
+  {name:'Illinois',      abbr:'IL', lat:40.3,  lon:89.0 },
+  {name:'Indiana',       abbr:'IN', lat:40.3,  lon:86.1 },
+  {name:'Iowa',          abbr:'IA', lat:42.0,  lon:93.5 },
+  {name:'Kansas',        abbr:'KS', lat:38.5,  lon:98.4 },
+  {name:'Kentucky',      abbr:'KY', lat:37.5,  lon:85.3 },
+  {name:'Louisiana',     abbr:'LA', lat:31.2,  lon:91.8 },
+  {name:'Maine',         abbr:'ME', lat:45.4,  lon:69.2 },
+  {name:'Maryland',      abbr:'MD', lat:39.1,  lon:76.8 },
+  {name:'Massachusetts', abbr:'MA', lat:42.4,  lon:71.5 },
+  {name:'Michigan',      abbr:'MI', lat:43.3,  lon:84.5 },
+  {name:'Minnesota',     abbr:'MN', lat:46.4,  lon:93.1 },
+  {name:'Mississippi',   abbr:'MS', lat:32.7,  lon:89.7 },
+  {name:'Missouri',      abbr:'MO', lat:38.5,  lon:92.6 },
+  {name:'Montana',       abbr:'MT', lat:47.0,  lon:109.6},
+  {name:'Nebraska',      abbr:'NE', lat:41.5,  lon:99.9 },
+  {name:'Nevada',        abbr:'NV', lat:39.3,  lon:116.9},
+  {name:'New Hampshire', abbr:'NH', lat:44.0,  lon:71.6 },
+  {name:'New Jersey',    abbr:'NJ', lat:40.1,  lon:74.5 },
+  {name:'New Mexico',    abbr:'NM', lat:34.8,  lon:106.2},
+  {name:'New York',      abbr:'NY', lat:42.9,  lon:75.1 },
+  {name:'North Carolina',abbr:'NC', lat:35.6,  lon:79.4 },
+  {name:'North Dakota',  abbr:'ND', lat:47.5,  lon:100.5},
+  {name:'Ohio',          abbr:'OH', lat:40.4,  lon:82.8 },
+  {name:'Oklahoma',      abbr:'OK', lat:35.6,  lon:96.9 },
+  {name:'Oregon',        abbr:'OR', lat:44.1,  lon:120.5},
+  {name:'Pennsylvania',  abbr:'PA', lat:40.9,  lon:77.8 },
+  {name:'Rhode Island',  abbr:'RI', lat:41.7,  lon:71.5 },
+  {name:'South Carolina',abbr:'SC', lat:33.9,  lon:80.9 },
+  {name:'South Dakota',  abbr:'SD', lat:44.4,  lon:100.4},
+  {name:'Tennessee',     abbr:'TN', lat:35.9,  lon:86.7 },
+  {name:'Texas',         abbr:'TX', lat:31.1,  lon:99.9 },
+  {name:'Utah',          abbr:'UT', lat:39.7,  lon:111.1},
+  {name:'Vermont',       abbr:'VT', lat:44.0,  lon:72.7 },
+  {name:'Virginia',      abbr:'VA', lat:37.5,  lon:78.5 },
+  {name:'Washington',    abbr:'WA', lat:47.4,  lon:120.5},
+  {name:'West Virginia', abbr:'WV', lat:38.6,  lon:80.6 },
+  {name:'Wisconsin',     abbr:'WI', lat:44.3,  lon:89.9 },
+  {name:'Wyoming',       abbr:'WY', lat:43.0,  lon:107.6},
+];
+
+let quizState = {};
+let quizTimer = null;
+
+function latLonToXY(lat, lon, W, H) {
+  const x = ((125 - lon) / 60) * W;
+  const y = ((50 - lat) / 25) * H;
+  return {x, y};
+}
+
+function initQuiz() {
+  gameTitle.textContent = '🗺️ US States Quiz';
+  gameHint.textContent  = 'Name all 50 states — 10 min';
+
+  const W = Math.min(720, Math.floor(window.innerWidth * 0.9));
+  const H = Math.round(W * 0.58);
+  gameCanvas.width = W; gameCanvas.height = H;
+
+  document.getElementById('quizInputRow').style.display = 'flex';
+  document.getElementById('scoreLabel').innerHTML = 'Found: <span id="scoreDisplay">0</span> / 50';
+
+  const input = document.getElementById('quizInput');
+  input.value = '';
+  input.className = 'quiz-input';
+  input.disabled = false;
+  input.focus();
+
+  // Precompute pixel coords
+  const states = ALL_STATES.map(s => ({
+    ...s,
+    px: s.special ? s.special.x * (W/760) : latLonToXY(s.lat, s.lon, W*0.88, H*0.88).x + W*0.03,
+    py: s.special ? s.special.y * (H/450) : latLonToXY(s.lat, s.lon, W*0.88, H*0.88).y + H*0.04,
+    guessed: false,
+    missed: false,
+  }));
+
+  quizState = {
+    W, H, states,
+    found: 0,
+    timeLeft: 600,
+    over: false,
+  };
+  scoreEl.textContent = '0';
+
+  if (quizTimer) clearInterval(quizTimer);
+  quizTimer = setInterval(() => {
+    if (quizState.over) { clearInterval(quizTimer); return; }
+    quizState.timeLeft--;
+    if (quizState.timeLeft <= 0) quizGiveUp();
+    drawQuiz();
+  }, 1000);
+
+  input.oninput = () => checkQuizInput();
+  drawQuiz();
+}
+
+function checkQuizInput() {
+  const input = document.getElementById('quizInput');
+  const typed = input.value.trim().toLowerCase();
+  const match = quizState.states.find(s => !s.guessed && s.name.toLowerCase() === typed);
+  if (match) {
+    match.guessed = true;
+    quizState.found++;
+    scoreEl.textContent = quizState.found;
+    input.value = '';
+    // Flash green
+    input.classList.add('flash-green');
+    setTimeout(() => input.classList.remove('flash-green'), 400);
+    drawQuiz();
+    if (quizState.found === 50) { quizState.over = true; clearInterval(quizTimer); drawQuiz(); }
+  }
+}
+
+function quizGiveUp() {
+  quizState.over = true;
+  clearInterval(quizTimer);
+  quizState.states.forEach(s => { if (!s.guessed) s.missed = true; });
+  document.getElementById('quizInput').disabled = true;
+  drawQuiz();
+}
+
+function drawQuiz() {
+  const {W, H, states, found, timeLeft, over} = quizState;
+  gc.clearRect(0, 0, W, H);
+
+  // Background
+  gc.fillStyle = '#0a0a1a'; gc.fillRect(0, 0, W, H);
+
+  // Ocean texture dots
+  gc.fillStyle = 'rgba(255,255,255,0.02)';
+  for (let x = 0; x < W; x += 18) for (let y = 0; y < H; y += 18)
+    gc.fillRect(x, y, 1, 1);
+
+  // Timer bar
+  if (!over) {
+    const progress = timeLeft / 600;
+    gc.fillStyle = 'rgba(255,255,255,0.05)'; gc.fillRect(0, H - 4, W, 4);
+    const barColor = progress > 0.4 ? '#10b981' : progress > 0.2 ? '#f59e0b' : '#ef4444';
+    gc.fillStyle = barColor; gc.fillRect(0, H - 4, W * progress, 4);
+  }
+
+  // Draw all state dots + labels
+  states.forEach(s => {
+    const {px, py, guessed, missed, abbr, name} = s;
+    if (guessed) {
+      // Glowing dot
+      gc.shadowColor = '#10b981'; gc.shadowBlur = 12;
+      gc.fillStyle = '#10b981';
+      gc.beginPath(); gc.arc(px, py, 5, 0, Math.PI * 2); gc.fill();
+      gc.shadowBlur = 0;
+      // Label
+      gc.font = `bold ${Math.max(8, W*0.016)}px JetBrains Mono`;
+      gc.fillStyle = '#10b981';
+      gc.textAlign = 'center';
+      gc.fillText(abbr, px, py - 9);
+    } else if (missed) {
+      gc.shadowColor = '#ef4444'; gc.shadowBlur = 8;
+      gc.fillStyle = '#ef4444';
+      gc.beginPath(); gc.arc(px, py, 4, 0, Math.PI * 2); gc.fill();
+      gc.shadowBlur = 0;
+      gc.font = `bold ${Math.max(7, W*0.014)}px JetBrains Mono`;
+      gc.fillStyle = '#ef4444'; gc.textAlign = 'center';
+      gc.fillText(abbr, px, py - 8);
+    } else {
+      gc.fillStyle = 'rgba(148,163,184,0.25)';
+      gc.beginPath(); gc.arc(px, py, 3, 0, Math.PI * 2); gc.fill();
+    }
+  });
+  gc.shadowBlur = 0;
+
+  // Timer display
+  if (!over) {
+    const m = Math.floor(timeLeft / 60), s2 = timeLeft % 60;
+    const tStr = `${m}:${String(s2).padStart(2,'0')}`;
+    gc.font = `bold ${W*0.03}px JetBrains Mono`;
+    gc.textAlign = 'right';
+    gc.fillStyle = timeLeft < 60 ? '#ef4444' : 'rgba(255,255,255,0.4)';
+    gc.fillText(tStr, W - 12, 26);
+  }
+
+  // Game over overlay
+  if (over) {
+    gc.fillStyle = 'rgba(0,0,0,0.7)'; gc.fillRect(0, 0, W, H);
+    gc.textAlign = 'center';
+    if (found === 50) {
+      gc.font = `bold ${W*0.055}px Inter`; gc.fillStyle = '#10b981';
+      gc.fillText('🎉 All 50 States!', W/2, H/2 - 16);
+    } else {
+      gc.font = `bold ${W*0.045}px Inter`; gc.fillStyle = '#fff';
+      gc.fillText(`${found} / 50 States`, W/2, H/2 - 16);
+      gc.font = `${W*0.028}px Inter`; gc.fillStyle = '#ef4444';
+      gc.fillText(`${50 - found} missed — shown in red`, W/2, H/2 + 20);
+    }
+    gc.font = `${W*0.025}px Inter`; gc.fillStyle = '#64748b';
+    gc.fillText('Press ↺ to try again', W/2, H/2 + 52);
   }
 }
 
