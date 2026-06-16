@@ -161,6 +161,7 @@ function openGame(type) {
   document.body.style.overflow = 'hidden';
   activeGame = type;
   document.getElementById('quizInputRow').style.display = type === 'quiz' ? 'flex' : 'none';
+  document.getElementById('dpad').style.display = type === 'quiz' ? 'none' : '';
   document.getElementById('scoreLabel').innerHTML = 'Score: <span id="scoreDisplay">0</span>';
   if (type === 'snake') initSnake();
   else if (type === 'pong') initPong();
@@ -192,7 +193,7 @@ let snakeState = {};
 function initSnake() {
   gameTitle.textContent = '🐍 Snake';
   gameHint.textContent  = 'Arrow keys / WASD to move';
-  const size = Math.min(500, Math.floor((window.innerWidth * 0.85) / CELL) * CELL);
+  const size = Math.min(500, Math.floor((window.innerWidth * 0.92) / CELL) * CELL);
   gameCanvas.width  = size;
   gameCanvas.height = size;
   const cols = size / CELL, rows = size / CELL;
@@ -292,7 +293,7 @@ let pongRAF   = null;
 function initPong() {
   gameTitle.textContent = '🏓 Pong';
   gameHint.textContent  = 'W/S — move paddle  |  vs AI';
-  const W = Math.min(640, Math.floor(window.innerWidth * 0.88));
+  const W = Math.min(640, Math.floor(window.innerWidth * 0.92));
   const H = Math.round(W * 0.6);
   gameCanvas.width = W; gameCanvas.height = H;
   const PH = H * 0.22, PW = W * 0.022;
@@ -472,7 +473,7 @@ function initQuiz() {
   gameHint.textContent  = 'Name all 36 states & UTs — 15 min';
 
   // India is roughly square in projection, slight portrait
-  const W = Math.min(500, Math.floor(window.innerWidth * 0.85));
+  const W = Math.min(500, Math.floor(window.innerWidth * 0.92));
   const H = Math.round(W * 1.12);
   gameCanvas.width = W; gameCanvas.height = H;
 
@@ -615,6 +616,27 @@ function drawQuiz() {
     }
     gc.font = `${W*0.025}px Inter`; gc.fillStyle = '#64748b';
     gc.fillText('Press ↺ to try again', W/2, H/2 + 52);
+  }
+}
+
+// ─── TOUCH D-PAD ─────────────────────────────────────────
+function dpadPress(dir) {
+  if (activeGame === 'snake' && snakeState) {
+    const d = snakeState.dir;
+    if (dir === 'up'    && d.y !== 1)  snakeState.nextDir = {x:0,  y:-1};
+    if (dir === 'down'  && d.y !== -1) snakeState.nextDir = {x:0,  y:1};
+    if (dir === 'left'  && d.x !== 1)  snakeState.nextDir = {x:-1, y:0};
+    if (dir === 'right' && d.x !== -1) snakeState.nextDir = {x:1,  y:0};
+  }
+  if (activeGame === 'pong' && pongState.keys) {
+    if (dir === 'up')   { pongState.keys['w'] = true;  pongState.keys['s'] = false; }
+    if (dir === 'down') { pongState.keys['s'] = true;  pongState.keys['w'] = false; }
+  }
+}
+function dpadRelease(dir) {
+  if (activeGame === 'pong' && pongState.keys) {
+    if (dir === 'up')   pongState.keys['w'] = false;
+    if (dir === 'down') pongState.keys['s'] = false;
   }
 }
 

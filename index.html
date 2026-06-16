@@ -626,6 +626,15 @@
         <button class="game-close" onclick="closeGame()">✕</button>
       </div>
       <canvas id="gameCanvas"></canvas>
+      <!-- Touch D-pad for Snake & Pong -->
+      <div class="dpad" id="dpad">
+        <button class="dpad-btn dpad-up"    id="dUp"    ontouchstart="dpadPress('up')"    ontouchend="dpadRelease('up')">↑</button>
+        <button class="dpad-btn dpad-left"  id="dLeft"  ontouchstart="dpadPress('left')"  ontouchend="dpadRelease('left')">←</button>
+        <div class="dpad-center"></div>
+        <button class="dpad-btn dpad-right" id="dRight" ontouchstart="dpadPress('right')" ontouchend="dpadRelease('right')">→</button>
+        <button class="dpad-btn dpad-down"  id="dDown"  ontouchstart="dpadPress('down')"  ontouchend="dpadRelease('down')">↓</button>
+      </div>
+
       <div class="quiz-input-row" id="quizInputRow" style="display:none">
         <input type="text" id="quizInput" class="quiz-input" placeholder="Type a US state name…" autocomplete="off" spellcheck="false" />
         <button class="quiz-giveup-btn" id="quizGiveupBtn" onclick="quizGiveUp()">Give Up</button>

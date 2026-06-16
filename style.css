@@ -510,15 +510,91 @@ footer a:hover { color: #fff; }
 
 /* ===== RESPONSIVE ===== */
 @media (max-width: 768px) {
+  /* Nav */
   .nav-links { display: none; }
   .hamburger { display: flex; }
-  .hero-stats { gap: 20px; }
-  .tl-item { gap: 16px; }
+
+  /* Hero */
+  .hero-content { padding: 88px 20px 48px; }
+  .hero-stats { gap: 16px; padding-top: 28px; }
+  .stat-n { font-size: 1.5rem; }
+  .hero-btns { gap: 10px; }
+  .btn { padding: 11px 22px; font-size: 0.88rem; }
+
+  /* Sections */
+  section { padding: 64px 0; }
+  .section-inner { padding: 0 16px; }
+  .section-header { margin-bottom: 36px; }
+
+  /* Projects */
+  .filter-bar { gap: 6px; }
+  .filter-btn { padding: 6px 12px; font-size: 0.78rem; }
+  .projects-grid { grid-template-columns: 1fr; gap: 14px; }
+  .project-card { padding: 20px; }
+
+  /* Timeline */
+  .tl-item { gap: 14px; }
   .timeline::before { left: 18px; }
-  section { padding: 72px 0; }
+  .tl-content { padding: 18px 16px; }
+  .tl-header { flex-direction: column; gap: 8px; }
+  .tl-date { align-self: flex-start; }
+
+  /* Skills */
+  .skills-grid { grid-template-columns: 1fr; gap: 14px; }
+  .certs-row { flex-direction: column; align-items: center; }
+  .cert-card { max-width: 100%; }
+
+  /* Contact */
+  .contact-links { flex-direction: column; align-items: center; }
+  .contact-card { max-width: 100%; width: 100%; }
+
+  /* Games modal */
+  .game-modal { padding: 14px; gap: 10px; border-radius: 14px; max-height: 96vh; overflow-y: auto; }
+  .game-title { font-size: 0.95rem; }
+  .game-controls-hint { display: none; }
+  .game-footer { gap: 8px; }
+  .game-restart-btn { padding: 7px 12px; font-size: 0.8rem; }
+
+  /* Touch D-pad for Snake/Pong */
+  .dpad { display: grid; }
+  .quiz-input { font-size: 0.9rem; padding: 9px 12px; }
 }
 
 @media (max-width: 480px) {
   .hero-name { letter-spacing: -2px; }
-  .projects-grid { grid-template-columns: 1fr; }
+  .hero-tag { font-size: 0.95rem; }
+  .hero-roles { font-size: 1rem; }
+  .hero-bio { font-size: 0.95rem; }
+  .stat-n { font-size: 1.3rem; }
+  .stat-l { font-size: 0.68rem; }
+  .section-header h2 { font-size: 1.8rem; }
+  .tl-bullets li { font-size: 0.84rem; }
+  .tl-company { font-size: 0.83rem; }
+}
+
+/* ===== TOUCH D-PAD (shown only on touch devices) ===== */
+.dpad {
+  display: none;
+  grid-template-columns: repeat(3, 48px);
+  grid-template-rows: repeat(3, 48px);
+  gap: 4px; justify-content: center; margin-top: 4px;
+}
+.dpad-btn {
+  background: var(--surface); border: 1px solid var(--border);
+  border-radius: 10px; color: var(--text-dim);
+  font-size: 1.2rem; cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+  transition: var(--transition); user-select: none;
+  -webkit-user-select: none;
+}
+.dpad-btn:active { background: var(--purple); color: #fff; border-color: var(--purple); transform: scale(0.93); }
+.dpad-up    { grid-column: 2; grid-row: 1; }
+.dpad-left  { grid-column: 1; grid-row: 2; }
+.dpad-center{ grid-column: 2; grid-row: 2; background: none; border: none; cursor: default; }
+.dpad-right { grid-column: 3; grid-row: 2; }
+.dpad-down  { grid-column: 2; grid-row: 3; }
+
+@media (pointer: coarse) {
+  .dpad { display: grid; }
+  .game-controls-hint { display: none; }
 }
