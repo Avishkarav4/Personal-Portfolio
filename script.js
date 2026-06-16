@@ -413,79 +413,71 @@ function drawPong() {
   }
 }
 
-// ─── US STATES QUIZ ──────────────────────────────────────
+// ─── INDIA STATES QUIZ ───────────────────────────────────
+// 28 States + 8 Union Territories = 36 total
+// lat/lon = approximate centroid
 const ALL_STATES = [
-  {name:'Alabama',       abbr:'AL', lat:32.3,  lon:86.9 },
-  {name:'Alaska',        abbr:'AK', lat:64.2,  lon:153.4, special:{x:82, y:388}},
-  {name:'Arizona',       abbr:'AZ', lat:34.3,  lon:111.7},
-  {name:'Arkansas',      abbr:'AR', lat:34.9,  lon:92.4 },
-  {name:'California',    abbr:'CA', lat:36.8,  lon:119.7},
-  {name:'Colorado',      abbr:'CO', lat:39.1,  lon:105.4},
-  {name:'Connecticut',   abbr:'CT', lat:41.6,  lon:72.7 },
-  {name:'Delaware',      abbr:'DE', lat:39.0,  lon:75.5 },
-  {name:'Florida',       abbr:'FL', lat:27.8,  lon:81.5 },
-  {name:'Georgia',       abbr:'GA', lat:32.2,  lon:83.4 },
-  {name:'Hawaii',        abbr:'HI', lat:20.0,  lon:157.0, special:{x:215, y:400}},
-  {name:'Idaho',         abbr:'ID', lat:44.4,  lon:114.5},
-  {name:'Illinois',      abbr:'IL', lat:40.3,  lon:89.0 },
-  {name:'Indiana',       abbr:'IN', lat:40.3,  lon:86.1 },
-  {name:'Iowa',          abbr:'IA', lat:42.0,  lon:93.5 },
-  {name:'Kansas',        abbr:'KS', lat:38.5,  lon:98.4 },
-  {name:'Kentucky',      abbr:'KY', lat:37.5,  lon:85.3 },
-  {name:'Louisiana',     abbr:'LA', lat:31.2,  lon:91.8 },
-  {name:'Maine',         abbr:'ME', lat:45.4,  lon:69.2 },
-  {name:'Maryland',      abbr:'MD', lat:39.1,  lon:76.8 },
-  {name:'Massachusetts', abbr:'MA', lat:42.4,  lon:71.5 },
-  {name:'Michigan',      abbr:'MI', lat:43.3,  lon:84.5 },
-  {name:'Minnesota',     abbr:'MN', lat:46.4,  lon:93.1 },
-  {name:'Mississippi',   abbr:'MS', lat:32.7,  lon:89.7 },
-  {name:'Missouri',      abbr:'MO', lat:38.5,  lon:92.6 },
-  {name:'Montana',       abbr:'MT', lat:47.0,  lon:109.6},
-  {name:'Nebraska',      abbr:'NE', lat:41.5,  lon:99.9 },
-  {name:'Nevada',        abbr:'NV', lat:39.3,  lon:116.9},
-  {name:'New Hampshire', abbr:'NH', lat:44.0,  lon:71.6 },
-  {name:'New Jersey',    abbr:'NJ', lat:40.1,  lon:74.5 },
-  {name:'New Mexico',    abbr:'NM', lat:34.8,  lon:106.2},
-  {name:'New York',      abbr:'NY', lat:42.9,  lon:75.1 },
-  {name:'North Carolina',abbr:'NC', lat:35.6,  lon:79.4 },
-  {name:'North Dakota',  abbr:'ND', lat:47.5,  lon:100.5},
-  {name:'Ohio',          abbr:'OH', lat:40.4,  lon:82.8 },
-  {name:'Oklahoma',      abbr:'OK', lat:35.6,  lon:96.9 },
-  {name:'Oregon',        abbr:'OR', lat:44.1,  lon:120.5},
-  {name:'Pennsylvania',  abbr:'PA', lat:40.9,  lon:77.8 },
-  {name:'Rhode Island',  abbr:'RI', lat:41.7,  lon:71.5 },
-  {name:'South Carolina',abbr:'SC', lat:33.9,  lon:80.9 },
-  {name:'South Dakota',  abbr:'SD', lat:44.4,  lon:100.4},
-  {name:'Tennessee',     abbr:'TN', lat:35.9,  lon:86.7 },
-  {name:'Texas',         abbr:'TX', lat:31.1,  lon:99.9 },
-  {name:'Utah',          abbr:'UT', lat:39.7,  lon:111.1},
-  {name:'Vermont',       abbr:'VT', lat:44.0,  lon:72.7 },
-  {name:'Virginia',      abbr:'VA', lat:37.5,  lon:78.5 },
-  {name:'Washington',    abbr:'WA', lat:47.4,  lon:120.5},
-  {name:'West Virginia', abbr:'WV', lat:38.6,  lon:80.6 },
-  {name:'Wisconsin',     abbr:'WI', lat:44.3,  lon:89.9 },
-  {name:'Wyoming',       abbr:'WY', lat:43.0,  lon:107.6},
+  // States
+  {name:'Andhra Pradesh',           abbr:'AP',  lat:15.9, lon:79.7},
+  {name:'Arunachal Pradesh',        abbr:'AR',  lat:28.2, lon:94.7},
+  {name:'Assam',                    abbr:'AS',  lat:26.2, lon:92.9},
+  {name:'Bihar',                    abbr:'BR',  lat:25.1, lon:85.3},
+  {name:'Chhattisgarh',             abbr:'CG',  lat:21.3, lon:81.9},
+  {name:'Goa',                      abbr:'GA',  lat:15.3, lon:74.1},
+  {name:'Gujarat',                  abbr:'GJ',  lat:22.3, lon:71.2},
+  {name:'Haryana',                  abbr:'HR',  lat:29.1, lon:76.1},
+  {name:'Himachal Pradesh',         abbr:'HP',  lat:31.1, lon:77.2},
+  {name:'Jharkhand',                abbr:'JH',  lat:23.6, lon:85.3},
+  {name:'Karnataka',                abbr:'KA',  lat:15.3, lon:75.7},
+  {name:'Kerala',                   abbr:'KL',  lat:10.5, lon:76.3},
+  {name:'Madhya Pradesh',           abbr:'MP',  lat:23.5, lon:77.7},
+  {name:'Maharashtra',              abbr:'MH',  lat:19.7, lon:75.7},
+  {name:'Manipur',                  abbr:'MN',  lat:24.7, lon:93.9},
+  {name:'Meghalaya',                abbr:'ML',  lat:25.5, lon:91.4},
+  {name:'Mizoram',                  abbr:'MZ',  lat:23.2, lon:92.8},
+  {name:'Nagaland',                 abbr:'NL',  lat:26.2, lon:94.6},
+  {name:'Odisha',                   abbr:'OD',  lat:20.9, lon:84.7},
+  {name:'Punjab',                   abbr:'PB',  lat:31.1, lon:75.3},
+  {name:'Rajasthan',                abbr:'RJ',  lat:27.0, lon:74.2},
+  {name:'Sikkim',                   abbr:'SK',  lat:27.5, lon:88.5},
+  {name:'Tamil Nadu',               abbr:'TN',  lat:11.1, lon:78.7},
+  {name:'Telangana',                abbr:'TS',  lat:18.1, lon:79.0},
+  {name:'Tripura',                  abbr:'TR',  lat:23.9, lon:91.9},
+  {name:'Uttar Pradesh',            abbr:'UP',  lat:26.8, lon:80.9},
+  {name:'Uttarakhand',              abbr:'UK',  lat:30.1, lon:79.3},
+  {name:'West Bengal',              abbr:'WB',  lat:22.5, lon:87.8},
+  // Union Territories
+  {name:'Andaman and Nicobar',      abbr:'AN',  lat:11.7, lon:92.7},
+  {name:'Chandigarh',               abbr:'CH',  lat:30.7, lon:76.8},
+  {name:'Dadra and Nagar Haveli',   abbr:'DN',  lat:20.2, lon:73.0},
+  {name:'Delhi',                    abbr:'DL',  lat:28.7, lon:77.1},
+  {name:'Jammu and Kashmir',        abbr:'JK',  lat:33.9, lon:76.9},
+  {name:'Ladakh',                   abbr:'LA',  lat:34.2, lon:77.6},
+  {name:'Lakshadweep',              abbr:'LD',  lat:10.6, lon:72.6},
+  {name:'Puducherry',               abbr:'PY',  lat:11.9, lon:79.8},
 ];
 
 let quizState = {};
 let quizTimer = null;
 
 function latLonToXY(lat, lon, W, H) {
-  const x = ((125 - lon) / 60) * W;
-  const y = ((50 - lat) / 25) * H;
+  // India bounds: lon 68–97, lat 8–37
+  const x = (lon - 68) / 29 * W;
+  const y = (37 - lat) / 29 * H;
   return {x, y};
 }
 
 function initQuiz() {
-  gameTitle.textContent = '🗺️ US States Quiz';
-  gameHint.textContent  = 'Name all 50 states — 10 min';
+  gameTitle.textContent = '🇮🇳 India States Quiz';
+  gameHint.textContent  = 'Name all 36 states & UTs — 15 min';
 
-  const W = Math.min(720, Math.floor(window.innerWidth * 0.9));
-  const H = Math.round(W * 0.58);
+  // India is roughly square in projection, slight portrait
+  const W = Math.min(500, Math.floor(window.innerWidth * 0.85));
+  const H = Math.round(W * 1.12);
   gameCanvas.width = W; gameCanvas.height = H;
 
   document.getElementById('quizInputRow').style.display = 'flex';
-  document.getElementById('scoreLabel').innerHTML = 'Found: <span id="scoreDisplay">0</span> / 50';
+  document.getElementById('scoreLabel').innerHTML = 'Found: <span id="scoreDisplay">0</span> / 36';
 
   const input = document.getElementById('quizInput');
   input.value = '';
@@ -493,11 +485,11 @@ function initQuiz() {
   input.disabled = false;
   input.focus();
 
-  // Precompute pixel coords
+  const pad = 0.08;
   const states = ALL_STATES.map(s => ({
     ...s,
-    px: s.special ? s.special.x * (W/760) : latLonToXY(s.lat, s.lon, W*0.88, H*0.88).x + W*0.03,
-    py: s.special ? s.special.y * (H/450) : latLonToXY(s.lat, s.lon, W*0.88, H*0.88).y + H*0.04,
+    px: latLonToXY(s.lat, s.lon, W * (1 - pad*2), H * (1 - pad*2)).x + W * pad,
+    py: latLonToXY(s.lat, s.lon, W * (1 - pad*2), H * (1 - pad*2)).y + H * pad,
     guessed: false,
     missed: false,
   }));
@@ -505,7 +497,8 @@ function initQuiz() {
   quizState = {
     W, H, states,
     found: 0,
-    timeLeft: 600,
+    total: ALL_STATES.length,
+    timeLeft: 900,
     over: false,
   };
   scoreEl.textContent = '0';
@@ -535,7 +528,7 @@ function checkQuizInput() {
     input.classList.add('flash-green');
     setTimeout(() => input.classList.remove('flash-green'), 400);
     drawQuiz();
-    if (quizState.found === 50) { quizState.over = true; clearInterval(quizTimer); drawQuiz(); }
+    if (quizState.found === quizState.total) { quizState.over = true; clearInterval(quizTimer); drawQuiz(); }
   }
 }
 
@@ -610,14 +603,15 @@ function drawQuiz() {
   if (over) {
     gc.fillStyle = 'rgba(0,0,0,0.7)'; gc.fillRect(0, 0, W, H);
     gc.textAlign = 'center';
-    if (found === 50) {
-      gc.font = `bold ${W*0.055}px Inter`; gc.fillStyle = '#10b981';
-      gc.fillText('🎉 All 50 States!', W/2, H/2 - 16);
+    const total = quizState.total || 36;
+    if (found === total) {
+      gc.font = `bold ${W*0.07}px Inter`; gc.fillStyle = '#10b981';
+      gc.fillText('🎉 All 36!', W/2, H/2 - 16);
     } else {
-      gc.font = `bold ${W*0.045}px Inter`; gc.fillStyle = '#fff';
-      gc.fillText(`${found} / 50 States`, W/2, H/2 - 16);
-      gc.font = `${W*0.028}px Inter`; gc.fillStyle = '#ef4444';
-      gc.fillText(`${50 - found} missed — shown in red`, W/2, H/2 + 20);
+      gc.font = `bold ${W*0.055}px Inter`; gc.fillStyle = '#fff';
+      gc.fillText(`${found} / ${total}`, W/2, H/2 - 16);
+      gc.font = `${W*0.035}px Inter`; gc.fillStyle = '#ef4444';
+      gc.fillText(`${total - found} missed — shown in red`, W/2, H/2 + 24);
     }
     gc.font = `${W*0.025}px Inter`; gc.fillStyle = '#64748b';
     gc.fillText('Press ↺ to try again', W/2, H/2 + 52);
