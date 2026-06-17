@@ -541,6 +541,44 @@ function quizGiveUp() {
   drawQuiz();
 }
 
+// Simplified India border (lat, lon pairs, clockwise from NW)
+const INDIA_BORDER = [
+  [35.0,74.0],[35.5,76.0],[35.2,77.5],[34.8,79.0],[34.5,80.5],
+  [33.5,81.0],[32.0,80.5],[30.5,81.0],[29.5,81.5],[28.6,83.0],
+  [27.5,84.5],[27.2,87.0],[27.5,88.8],[27.0,89.5],[26.8,91.5],
+  [27.5,93.5],[28.2,96.0],[28.0,97.3],[26.5,97.5],[25.0,97.0],
+  [24.0,94.5],[23.5,93.5],[23.0,93.2],[22.5,92.5],[22.0,91.5],
+  [21.5,89.5],[20.5,87.0],[19.5,85.5],[17.5,82.5],[16.0,81.0],
+  [15.0,80.5],[14.0,80.2],[13.2,80.3],[10.5,79.5],[9.0,78.5],
+  [8.2,77.5],[8.1,77.2],[8.5,76.8],[9.5,76.5],[10.8,76.0],
+  [11.8,75.5],[13.0,74.8],[14.5,74.0],[15.5,73.8],[17.0,73.4],
+  [18.5,72.8],[20.0,72.6],[21.5,72.2],[22.5,68.5],[23.5,68.0],
+  [25.0,68.5],[27.0,68.5],[28.5,70.5],[29.5,71.5],[30.5,72.5],
+  [31.5,73.8],[32.5,74.5],[33.5,74.5],[34.5,74.0],[35.0,74.0],
+];
+
+function drawIndiaBorder(W, H) {
+  const pad = 0.08;
+  const mw = W * (1 - pad * 2), mh = H * (1 - pad * 2);
+  const ox = W * pad, oy = H * pad;
+  function p(lat, lon) {
+    return { x: (lon - 68) / 29 * mw + ox, y: (37 - lat) / 29 * mh + oy };
+  }
+  gc.beginPath();
+  const start = p(INDIA_BORDER[0][0], INDIA_BORDER[0][1]);
+  gc.moveTo(start.x, start.y);
+  for (let i = 1; i < INDIA_BORDER.length; i++) {
+    const pt = p(INDIA_BORDER[i][0], INDIA_BORDER[i][1]);
+    gc.lineTo(pt.x, pt.y);
+  }
+  gc.closePath();
+  gc.fillStyle   = 'rgba(99,102,241,0.07)';  gc.fill();
+  gc.strokeStyle = 'rgba(139,92,246,0.5)';
+  gc.lineWidth   = 1.5;
+  gc.setLineDash([]);
+  gc.stroke();
+}
+
 function drawQuiz() {
   const {W, H, states, found, timeLeft, over} = quizState;
   gc.clearRect(0, 0, W, H);
@@ -552,6 +590,9 @@ function drawQuiz() {
   gc.fillStyle = 'rgba(255,255,255,0.02)';
   for (let x = 0; x < W; x += 18) for (let y = 0; y < H; y += 18)
     gc.fillRect(x, y, 1, 1);
+
+  // India border
+  drawIndiaBorder(W, H);
 
   // Timer bar
   if (!over) {
