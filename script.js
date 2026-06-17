@@ -347,16 +347,15 @@ function stepPong() {
   if (b.y - b.r <= 0) { b.y = b.r; b.vy = Math.abs(b.vy); }
   if (b.y + b.r >= H) { b.y = H - b.r; b.vy = -Math.abs(b.vy); }
 
-  // Player paddle (left side, x = PW)
+  // Player paddle (left side)
   if (b.x - b.r <= PW*2 && b.y >= pl.y && b.y <= pl.y+PH && b.vx < 0) {
     b.vx = Math.abs(b.vx) * 1.05;
     b.vy += ((b.y - (pl.y+PH/2)) / (PH/2)) * Math.abs(b.vx) * 0.4;
     b.x = PW*2 + b.r;
     const mx = W * 0.018; b.vx = Math.min(b.vx, mx); b.vy = Math.max(-mx, Math.min(mx, b.vy));
-    p.player.score += 1; scoreEl.textContent = p.player.score;
   }
 
-  // AI paddle (right side, x = W - PW)
+  // Bot paddle (right side)
   if (b.x + b.r >= W-PW*2 && b.y >= ai.y && b.y <= ai.y+PH && b.vx > 0) {
     b.vx = -Math.abs(b.vx) * 1.05;
     b.vy += ((b.y - (ai.y+PH/2)) / (PH/2)) * Math.abs(b.vx) * 0.4;
@@ -364,9 +363,25 @@ function stepPong() {
     const mx = W * 0.018; b.vx = Math.max(b.vx, -mx); b.vy = Math.max(-mx, Math.min(mx, b.vy));
   }
 
-  // Score
-  if (b.x < 0) { p.winner = '🤖 Bot Wins!'; p.over = true; }
-  if (b.x > W) { p.winner = '🎉 You Win!'; p.over = true; }
+  // Point scored — reset ball, increment score
+  if (b.x < 0) {
+    ai.score++;
+    if (ai.score >= 5) { p.winner = '🤖 Bot Wins!'; p.over = true; }
+    else resetPongBall(p);
+  }
+  if (b.x > W) {
+    pl.score++;
+    scoreEl.textContent = pl.score;
+    if (pl.score >= 5) { p.winner = '🎉 You Win!'; p.over = true; }
+    else resetPongBall(p);
+  }
+}
+
+function resetPongBall(p) {
+  p.ball.x  = p.W / 2;
+  p.ball.y  = p.H / 2;
+  p.ball.vx = p.W * 0.007 * (Math.random() > 0.5 ? 1 : -1);
+  p.ball.vy = p.H * 0.007 * (Math.random() > 0.5 ? 1 : -1);
 }
 
 function drawPong() {
@@ -405,8 +420,11 @@ function drawPong() {
 
   // Labels
   gc.font = `${W*0.022}px Inter`; gc.fillStyle = '#64748b'; gc.textAlign = 'center';
-  gc.fillText('YOU', W*0.25, H*0.95);
-  gc.fillText('BOT', W*0.75, H*0.95);
+  gc.fillText('YOU', W*0.25, H*0.94);
+  gc.fillText('BOT', W*0.75, H*0.94);
+  // First to 5 label
+  gc.font = `${W*0.018}px Inter`; gc.fillStyle = 'rgba(255,255,255,0.2)';
+  gc.fillText('first to 5', W/2, H*0.94);
 
   // Game over
   if (p.over) {
