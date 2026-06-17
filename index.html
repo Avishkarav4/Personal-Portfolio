@@ -10,6 +10,25 @@
 </head>
 <body>
 
+  <!-- SCROLL PROGRESS BAR -->
+  <div class="scroll-progress" id="scrollProgress"></div>
+
+  <!-- CUSTOM CURSOR -->
+  <div class="cursor-dot" id="cursorDot"></div>
+  <div class="cursor-ring" id="cursorRing"></div>
+
+  <!-- SIDE SCROLL-SPY DOTS -->
+  <div class="side-dots" id="sideDots">
+    <a href="#hero" class="side-dot active" data-label="Home"></a>
+    <a href="#projects" class="side-dot" data-label="Projects"></a>
+    <a href="#experience" class="side-dot" data-label="Experience"></a>
+    <a href="#skills" class="side-dot" data-label="Skills"></a>
+    <a href="#contact" class="side-dot" data-label="Contact"></a>
+  </div>
+
+  <!-- BACK TO TOP -->
+  <button class="back-to-top" id="backToTop" aria-label="Back to top">↑</button>
+
   <!-- NAV -->
   <nav id="nav">
     <div class="nav-inner">
@@ -35,6 +54,9 @@
   <!-- HERO -->
   <section id="hero">
     <canvas id="stars"></canvas>
+    <div class="parallax-blob blob-1" data-speed="0.25"></div>
+    <div class="parallax-blob blob-2" data-speed="0.4"></div>
+    <div class="parallax-blob blob-3" data-speed="0.15"></div>
     <div class="hero-content">
       <p class="hero-tag">👋 Hey there, I'm</p>
       <h1 class="hero-name">Avishkar AV</h1>
@@ -51,10 +73,10 @@
         <a href="https://linkedin.com/in/avishkarav" target="_blank" class="btn btn-ghost">LinkedIn ↗</a>
       </div>
       <div class="hero-stats">
-        <div class="stat"><span class="stat-n">46%</span><span class="stat-l">Infra Cost Cut</span></div>
-        <div class="stat"><span class="stat-n">10s→2s</span><span class="stat-l">Latency Slashed</span></div>
-        <div class="stat"><span class="stat-n">3</span><span class="stat-l">Play Store Apps</span></div>
-        <div class="stat"><span class="stat-n">489</span><span class="stat-l">DB Rows Cleaned</span></div>
+        <div class="stat"><span class="stat-n" data-count="46" data-suffix="%">0%</span><span class="stat-l">Infra Cost Cut</span></div>
+        <div class="stat"><span class="stat-n stat-latency">10s→2s</span><span class="stat-l">Latency Slashed</span></div>
+        <div class="stat"><span class="stat-n" data-count="3">0</span><span class="stat-l">Play Store Apps</span></div>
+        <div class="stat"><span class="stat-n" data-count="489">0</span><span class="stat-l">DB Rows Cleaned</span></div>
       </div>
     </div>
     <div class="scroll-hint">scroll down ↓</div>

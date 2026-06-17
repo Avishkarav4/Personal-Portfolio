@@ -78,6 +78,128 @@ function type() {
 }
 setTimeout(type, 800);
 
+// ===== SCROLL PROGRESS BAR =====
+const scrollProgress = document.getElementById('scrollProgress');
+function updateScrollProgress() {
+  const h = document.documentElement;
+  const scrolled = (h.scrollTop) / (h.scrollHeight - h.clientHeight) * 100;
+  scrollProgress.style.width = scrolled + '%';
+}
+window.addEventListener('scroll', updateScrollProgress);
+updateScrollProgress();
+
+// ===== CUSTOM CURSOR =====
+const cursorDot  = document.getElementById('cursorDot');
+const cursorRing = document.getElementById('cursorRing');
+let mouseX = 0, mouseY = 0, ringX = 0, ringY = 0;
+
+window.addEventListener('mousemove', e => {
+  mouseX = e.clientX; mouseY = e.clientY;
+  cursorDot.style.left = mouseX + 'px';
+  cursorDot.style.top  = mouseY + 'px';
+});
+
+function animateCursorRing() {
+  ringX += (mouseX - ringX) * 0.18;
+  ringY += (mouseY - ringY) * 0.18;
+  cursorRing.style.left = ringX + 'px';
+  cursorRing.style.top  = ringY + 'px';
+  requestAnimationFrame(animateCursorRing);
+}
+animateCursorRing();
+
+document.querySelectorAll('a, button, .project-card, .pill, .side-dot').forEach(el => {
+  el.addEventListener('mouseenter', () => cursorRing.classList.add('hovering'));
+  el.addEventListener('mouseleave', () => cursorRing.classList.remove('hovering'));
+});
+
+// ===== SIDE SCROLL-SPY DOTS =====
+const sideDots = document.querySelectorAll('.side-dot');
+const spySections = ['hero', 'projects', 'experience', 'skills', 'contact'].map(id => document.getElementById(id));
+
+function updateSideDots() {
+  let current = spySections[0];
+  spySections.forEach(sec => {
+    if (sec && window.scrollY >= sec.offsetTop - window.innerHeight / 2) current = sec;
+  });
+  sideDots.forEach(dot => {
+    dot.classList.toggle('active', dot.getAttribute('href') === '#' + current.id);
+  });
+}
+window.addEventListener('scroll', updateSideDots);
+updateSideDots();
+
+// ===== BACK TO TOP =====
+const backToTop = document.getElementById('backToTop');
+window.addEventListener('scroll', () => {
+  backToTop.classList.toggle('visible', window.scrollY > 600);
+});
+backToTop.addEventListener('click', () => window.scrollTo({ top: 0, behavior: 'smooth' }));
+
+// ===== PARALLAX BLOBS =====
+const parallaxBlobs = document.querySelectorAll('.parallax-blob');
+window.addEventListener('scroll', () => {
+  const y = window.scrollY;
+  parallaxBlobs.forEach(blob => {
+    const speed = parseFloat(blob.dataset.speed);
+    blob.style.transform = `translateY(${y * speed}px)`;
+  });
+});
+
+// ===== ANIMATED STAT COUNTERS =====
+const counters = document.querySelectorAll('.stat-n[data-count]');
+const counterObserver = new IntersectionObserver(entries => {
+  entries.forEach(entry => {
+    if (!entry.isIntersecting) return;
+    const el = entry.target;
+    const target = parseInt(el.dataset.count, 10);
+    const suffix = el.dataset.suffix || '';
+    const duration = 1200;
+    const start = performance.now();
+    function tick(now) {
+      const progress = Math.min((now - start) / duration, 1);
+      const eased = 1 - Math.pow(1 - progress, 3);
+      el.textContent = Math.round(eased * target) + suffix;
+      if (progress < 1) requestAnimationFrame(tick);
+    }
+    requestAnimationFrame(tick);
+    counterObserver.unobserve(el);
+  });
+}, { threshold: 0.5 });
+counters.forEach(el => counterObserver.observe(el));
+
+// ===== SPLIT-TEXT HEADING REVEAL =====
+document.querySelectorAll('.section-header h2').forEach(h2 => {
+  const text = h2.textContent;
+  h2.innerHTML = text.split(' ').map(word =>
+    `<span class="split-word"><span>${word}</span></span>`
+  ).join(' ');
+});
+const splitWords = document.querySelectorAll('.split-word');
+const splitObserver = new IntersectionObserver(entries => {
+  entries.forEach((entry, i) => {
+    if (entry.isIntersecting) {
+      const wordsInSection = entry.target.parentElement.querySelectorAll('.split-word');
+      wordsInSection.forEach((w, idx) => {
+        setTimeout(() => w.classList.add('in-view'), idx * 60);
+      });
+      splitObserver.unobserve(entry.target);
+    }
+  });
+}, { threshold: 0.4 });
+splitWords.forEach(w => splitObserver.observe(w));
+
+// ===== MAGNETIC BUTTONS =====
+document.querySelectorAll('.btn, .btn-play').forEach(btn => {
+  btn.addEventListener('mousemove', e => {
+    const rect = btn.getBoundingClientRect();
+    const x = e.clientX - rect.left - rect.width / 2;
+    const y = e.clientY - rect.top - rect.height / 2;
+    btn.style.transform = `translate(${x * 0.25}px, ${y * 0.25}px)`;
+  });
+  btn.addEventListener('mouseleave', () => { btn.style.transform = ''; });
+});
+
 // ===== NAV SCROLL =====
 const nav = document.getElementById('nav');
 window.addEventListener('scroll', () => {
