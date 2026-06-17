@@ -296,7 +296,7 @@ let pongRAF   = null;
 
 function initPong() {
   gameTitle.textContent = '🏓 Pong';
-  gameHint.textContent  = 'W/S — move paddle  |  vs AI';
+  gameHint.textContent  = 'W/S — move paddle  |  vs Bot';
   const W = Math.min(640, Math.floor(window.innerWidth * 0.92));
   const H = Math.round(W * 0.6);
   gameCanvas.width = W; gameCanvas.height = H;
@@ -365,7 +365,7 @@ function stepPong() {
   }
 
   // Score
-  if (b.x < 0) { p.winner = '🤖 AI Wins!'; p.over = true; }
+  if (b.x < 0) { p.winner = '🤖 Bot Wins!'; p.over = true; }
   if (b.x > W) { p.winner = '🎉 You Win!'; p.over = true; }
 }
 
@@ -406,7 +406,7 @@ function drawPong() {
   // Labels
   gc.font = `${W*0.022}px Inter`; gc.fillStyle = '#64748b'; gc.textAlign = 'center';
   gc.fillText('YOU', W*0.25, H*0.95);
-  gc.fillText('AI', W*0.75, H*0.95);
+  gc.fillText('BOT', W*0.75, H*0.95);
 
   // Game over
   if (p.over) {
