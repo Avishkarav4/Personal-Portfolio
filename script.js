@@ -149,7 +149,8 @@ sections.forEach(s => sectionObserver.observe(s));
 const overlay    = document.getElementById('gameOverlay');
 const gameCanvas = document.getElementById('gameCanvas');
 const gc         = gameCanvas.getContext('2d');
-const scoreEl    = document.getElementById('scoreDisplay');
+let scoreEl      = document.getElementById('scoreDisplay');
+function refreshScoreEl() { scoreEl = document.getElementById('scoreDisplay'); }
 const gameTitle  = document.getElementById('gameTitle');
 const gameHint   = document.getElementById('gameHint');
 
@@ -163,6 +164,7 @@ function openGame(type) {
   document.getElementById('quizInputRow').style.display = type === 'quiz' ? 'flex' : 'none';
   document.getElementById('dpad').style.display = type === 'quiz' ? 'none' : '';
   document.getElementById('scoreLabel').innerHTML = 'Score: <span id="scoreDisplay">0</span>';
+  refreshScoreEl();
   if (type === 'snake') initSnake();
   else if (type === 'pong') initPong();
   else initQuiz();
@@ -181,6 +183,8 @@ function closeGame(e) {
 function restartGame() {
   if (gameLoop) { clearInterval(gameLoop); cancelAnimationFrame(gameLoop); gameLoop = null; }
   if (quizTimer) { clearInterval(quizTimer); quizTimer = null; }
+  document.getElementById('scoreLabel').innerHTML = 'Score: <span id="scoreDisplay">0</span>';
+  refreshScoreEl();
   if (activeGame === 'snake') initSnake();
   else if (activeGame === 'pong') initPong();
   else if (activeGame === 'quiz') initQuiz();
@@ -479,6 +483,7 @@ function initQuiz() {
 
   document.getElementById('quizInputRow').style.display = 'flex';
   document.getElementById('scoreLabel').innerHTML = 'Found: <span id="scoreDisplay">0</span> / 36';
+  refreshScoreEl();
 
   const input = document.getElementById('quizInput');
   input.value = '';
