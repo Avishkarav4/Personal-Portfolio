@@ -284,12 +284,14 @@ function openGame(type) {
   document.body.style.overflow = 'hidden';
   activeGame = type;
   document.getElementById('quizInputRow').style.display = type === 'quiz' ? 'flex' : 'none';
-  document.getElementById('dpad').style.display = type === 'quiz' ? 'none' : '';
+  document.getElementById('dpad').style.display = (type === 'snake' || type === 'pong') ? '' : 'none';
   document.getElementById('scoreLabel').innerHTML = 'Score: <span id="scoreDisplay">0</span>';
   refreshScoreEl();
   if (type === 'snake') initSnake();
   else if (type === 'pong') initPong();
-  else initQuiz();
+  else if (type === 'quiz') initQuiz();
+  else if (type === 'hirst') initHirst();
+  else if (type === 'flashcards') initFlashcards();
 }
 
 function closeGame(e) {
@@ -310,6 +312,8 @@ function restartGame() {
   if (activeGame === 'snake') initSnake();
   else if (activeGame === 'pong') initPong();
   else if (activeGame === 'quiz') initQuiz();
+  else if (activeGame === 'hirst') initHirst();
+  else if (activeGame === 'flashcards') initFlashcards();
 }
 
 // ─── SNAKE ───────────────────────────────────────────────
@@ -818,6 +822,11 @@ function dpadPress(dir) {
     if (dir === 'up')   { pongState.keys['w'] = true;  pongState.keys['s'] = false; }
     if (dir === 'down') { pongState.keys['s'] = true;  pongState.keys['w'] = false; }
   }
+  if (activeGame === 'flashcards') {
+    if (dir === 'left')  nextFlashcard(false);
+    if (dir === 'right') nextFlashcard(true);
+    if (dir === 'up' || dir === 'down') flipFlashcard();
+  }
 }
 function dpadRelease(dir) {
   if (activeGame === 'pong' && pongState.keys) {
@@ -825,6 +834,148 @@ function dpadRelease(dir) {
     if (dir === 'down') pongState.keys['s'] = false;
   }
 }
+
+// ─── HIRST PAINTING GENERATOR ───────────────────────────
+const HIRST_PALETTES = [
+  ['#e63946','#f1faee','#a8dadc','#457b9d','#1d3557','#ffb703','#fb8500'],
+  ['#06d6a0','#118ab2','#073b4c','#ffd166','#ef476f','#f78c6b','#83c5be'],
+  ['#9b5de5','#f15bb5','#fee440','#00bbf9','#00f5d4','#fb6f92','#ff9f1c'],
+  ['#264653','#2a9d8f','#e9c46a','#f4a261','#e76f51','#ffe066','#a7c957'],
+  ['#ff006e','#fb5607','#ffbe0b','#8338ec','#3a86ff','#06ffa5','#ff5d8f'],
+];
+
+function initHirst() {
+  gameTitle.textContent = '🎨 Hirst Painting';
+  gameHint.textContent  = 'Press ↺ to generate a new one';
+  document.getElementById('scoreLabel').innerHTML = 'Dots: <span id="scoreDisplay">100</span>';
+  refreshScoreEl();
+
+  const size = Math.min(520, Math.floor(window.innerWidth * 0.9));
+  gameCanvas.width = size;
+  gameCanvas.height = size;
+
+  const palette = HIRST_PALETTES[Math.floor(Math.random() * HIRST_PALETTES.length)];
+  const rows = 10, cols = 10;
+  const margin = size * 0.08;
+  const spacing = (size - margin * 2) / (cols - 1);
+  const dotRadius = spacing * 0.32;
+
+  gc.fillStyle = '#f5f1e8';
+  gc.fillRect(0, 0, size, size);
+
+  for (let row = 0; row < rows; row++) {
+    for (let col = 0; col < cols; col++) {
+      const x = margin + col * spacing;
+      const y = margin + row * spacing;
+      gc.beginPath();
+      gc.arc(x, y, dotRadius, 0, Math.PI * 2);
+      gc.fillStyle = palette[Math.floor(Math.random() * palette.length)];
+      gc.fill();
+    }
+  }
+  scoreEl.textContent = rows * cols;
+}
+
+// ─── FRENCH FLASHCARDS ───────────────────────────────────
+const FLASHCARD_WORDS = [
+  { fr: 'le bonjour', en: 'hello' },
+  { fr: 'le monde', en: 'world' },
+  { fr: 'manger', en: 'to eat' },
+  { fr: 'boire', en: 'to drink' },
+  { fr: 'parler', en: 'to speak' },
+  { fr: 'le chat', en: 'cat' },
+  { fr: 'le chien', en: 'dog' },
+  { fr: 'la maison', en: 'house' },
+  { fr: 'le livre', en: 'book' },
+  { fr: "l'eau", en: 'water' },
+];
+
+let flashcardState = {};
+
+function initFlashcards() {
+  gameTitle.textContent = '🗂️ French Flashcards';
+  gameHint.textContent  = 'Click card to flip · ← Skip  → Got it!';
+  document.getElementById('dpad').style.display = '';
+
+  const W = Math.min(420, Math.floor(window.innerWidth * 0.85));
+  const H = Math.round(W * 0.62);
+  gameCanvas.width = W; gameCanvas.height = H;
+
+  flashcardState = {
+    deck: [...FLASHCARD_WORDS],
+    known: 0,
+    total: FLASHCARD_WORDS.length,
+    index: 0,
+    flipped: false,
+  };
+  document.getElementById('scoreLabel').innerHTML =
+    `Known: <span id="scoreDisplay">0</span> / ${flashcardState.total}`;
+  refreshScoreEl();
+  drawFlashcard();
+}
+
+function drawFlashcard() {
+  const f = flashcardState;
+  const W = gameCanvas.width, H = gameCanvas.height;
+  gc.clearRect(0, 0, W, H);
+
+  if (f.deck.length === 0) {
+    gc.fillStyle = '#0d0d1a'; gc.fillRect(0, 0, W, H);
+    gc.fillStyle = '#10b981'; gc.textAlign = 'center';
+    gc.font = `bold ${W*0.07}px Inter`;
+    gc.fillText('🎉 Deck Complete!', W/2, H/2);
+    return;
+  }
+
+  const card = f.deck[f.index % f.deck.length];
+  const isFront = !f.flipped;
+
+  // Card background
+  const grad = gc.createLinearGradient(0, 0, W, H);
+  if (isFront) { grad.addColorStop(0, '#7c3aed'); grad.addColorStop(1, '#6366f1'); }
+  else { grad.addColorStop(0, '#10b981'); grad.addColorStop(1, '#059669'); }
+  gc.fillStyle = grad;
+  gc.beginPath();
+  gc.roundRect(W*0.08, H*0.12, W*0.84, H*0.76, 20);
+  gc.fill();
+
+  gc.fillStyle = 'rgba(255,255,255,0.7)';
+  gc.font = `${W*0.045}px Inter`;
+  gc.textAlign = 'center';
+  gc.fillText(isFront ? 'FRENCH' : 'ENGLISH', W/2, H*0.27);
+
+  gc.fillStyle = '#fff';
+  gc.font = `bold ${W*0.085}px Inter`;
+  gc.fillText(isFront ? card.fr : card.en, W/2, H*0.56);
+
+  gc.fillStyle = 'rgba(255,255,255,0.5)';
+  gc.font = `${W*0.032}px Inter`;
+  gc.fillText('click to flip', W/2, H*0.78);
+}
+
+function flipFlashcard() {
+  if (flashcardState.deck.length === 0) return;
+  flashcardState.flipped = !flashcardState.flipped;
+  drawFlashcard();
+}
+
+function nextFlashcard(markKnown) {
+  const f = flashcardState;
+  if (f.deck.length === 0) return;
+  if (markKnown) {
+    f.deck.splice(f.index % f.deck.length, 1);
+    f.known++;
+    scoreEl.textContent = f.known;
+  } else {
+    f.index++;
+  }
+  f.flipped = false;
+  drawFlashcard();
+}
+
+gameCanvas.addEventListener('click', () => {
+  if (activeGame === 'flashcards') flipFlashcard();
+});
 
 // Keyboard listeners for pong
 document.addEventListener('keydown', e => {
@@ -838,6 +989,12 @@ document.addEventListener('keydown', e => {
     if ((e.key==='ArrowDown'||e.key==='s'||e.key==='S')  && d.y!==-1) snakeState.nextDir={x:0,y:1};
     if ((e.key==='ArrowLeft'||e.key==='a'||e.key==='A')  && d.x!==1)  snakeState.nextDir={x:-1,y:0};
     if ((e.key==='ArrowRight'||e.key==='d'||e.key==='D') && d.x!==-1) snakeState.nextDir={x:1,y:0};
+  }
+  // Flashcard navigation
+  if (activeGame === 'flashcards') {
+    if (e.key === 'ArrowLeft')  nextFlashcard(false);
+    if (e.key === 'ArrowRight') nextFlashcard(true);
+    if (e.key === ' ' || e.key === 'ArrowUp' || e.key === 'ArrowDown') flipFlashcard();
   }
 });
 document.addEventListener('keyup', e => {
