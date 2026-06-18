@@ -7,6 +7,7 @@
   <link rel="stylesheet" href="style.css" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet" />
+  <script defer src="https://cdn.jsdelivr.net/npm/@vladmandic/face-api/dist/face-api.js"></script>
 </head>
 <body>
 
@@ -247,10 +248,11 @@
             </div>
           </div>
           <h3>Smart Attendance System</h3>
-          <p>Real-time facial recognition via CCTV feeds that auto-marks attendance to a CSV — completely replacing manual roll calls. Built with OpenCV and NumPy for a fast, low-latency pipeline.</p>
+          <p>Real-time facial recognition via CCTV feeds that auto-marks attendance to a CSV — completely replacing manual roll calls. Built with OpenCV and NumPy for a fast, low-latency pipeline. Try the live browser demo!</p>
           <div class="card-tags">OpenCV · NumPy · Face Recognition · CSV</div>
           <div class="card-links">
-            <a href="https://github.com/Avishkarav4/Smart-Attendance" target="_blank" class="card-link">GitHub ↗</a>
+            <button class="btn-play" onclick="openAttendance()">📷 Live Demo</button>
+            <a href="https://github.com/Avishkarav4/Smart-Attendance" target="_blank" class="card-link" style="margin-left:12px">GitHub ↗</a>
           </div>
         </div>
 
@@ -641,6 +643,37 @@
     <p>Designed & built by <strong>Avishkar AV</strong> · <a href="https://github.com/Avishkarav4" target="_blank">Source on GitHub ↗</a></p>
   </footer>
 
+  <!-- SMART ATTENDANCE LIVE DEMO -->
+  <div class="attendance-overlay" id="attendanceOverlay" onclick="closeAttendance(event)">
+    <div class="attendance-modal">
+      <div class="game-modal-header">
+        <span class="game-title">📸 Smart Attendance — Live Demo</span>
+        <button class="game-close" onclick="closeAttendance()">✕</button>
+      </div>
+
+      <div class="attendance-video-wrap">
+        <video id="attendanceVideo" autoplay muted playsinline></video>
+        <canvas id="attendanceCanvas"></canvas>
+        <div class="attendance-status" id="attendanceStatus">Loading face recognition models…</div>
+      </div>
+
+      <div class="attendance-controls">
+        <input type="text" id="attendanceNameInput" class="quiz-input" placeholder="Enter your name…" autocomplete="off" />
+        <button class="btn-play" id="registerFaceBtn" onclick="registerFace()">📷 Register Face</button>
+      </div>
+
+      <div class="attendance-log">
+        <div class="attendance-log-header">
+          <span>Attendance Log</span>
+          <button class="game-restart-btn" onclick="resetAttendance()">↺ Reset</button>
+        </div>
+        <div id="attendanceLogList" class="attendance-log-list">
+          <p class="attendance-empty">No one's checked in yet — register your face above.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
   <!-- GAME MODALS -->
   <div class="game-overlay" id="gameOverlay" onclick="closeGame(event)">
     <div class="game-modal">
@@ -671,5 +704,6 @@
   </div>
 
   <script src="script.js"></script>
+  <script src="attendance.js"></script>
 </body>
 </html>

@@ -599,6 +599,70 @@ footer a:hover { color: #fff; }
 }
 .quiz-giveup-btn:hover { background: #ef4444; color: #fff; border-color: #ef4444; }
 
+/* ===== ATTENDANCE LIVE DEMO ===== */
+.attendance-overlay {
+  position: fixed; inset: 0; z-index: 999;
+  background: rgba(0,0,0,0.85);
+  backdrop-filter: blur(12px);
+  display: none; align-items: center; justify-content: center;
+  padding: 20px;
+}
+.attendance-overlay.open { display: flex; }
+
+.attendance-modal {
+  background: var(--bg2);
+  border: 1px solid rgba(124,58,237,0.4);
+  border-radius: 20px;
+  padding: 20px;
+  display: flex; flex-direction: column; gap: 14px;
+  box-shadow: 0 0 60px rgba(124,58,237,0.2);
+  animation: popIn 0.25s cubic-bezier(0.34,1.56,0.64,1);
+  max-width: 95vw; width: 480px; max-height: 92vh; overflow-y: auto;
+}
+
+.attendance-video-wrap {
+  position: relative; width: 100%; aspect-ratio: 4/3;
+  border-radius: 14px; overflow: hidden; background: #000;
+  border: 1px solid var(--border);
+}
+.attendance-video-wrap video {
+  width: 100%; height: 100%; object-fit: cover;
+  transform: scaleX(-1); /* mirror like a selfie cam */
+}
+.attendance-video-wrap canvas {
+  position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+  transform: scaleX(-1);
+}
+.attendance-status {
+  position: absolute; bottom: 10px; left: 10px; right: 10px;
+  background: rgba(0,0,0,0.65); color: #fff; font-size: 0.78rem;
+  padding: 8px 12px; border-radius: 8px; text-align: center;
+  font-family: var(--mono); pointer-events: none;
+}
+
+.attendance-controls { display: flex; gap: 8px; }
+.attendance-controls .btn-play { white-space: nowrap; }
+
+.attendance-log {
+  background: var(--bg); border: 1px solid var(--border);
+  border-radius: 12px; padding: 14px; max-height: 180px;
+}
+.attendance-log-header {
+  display: flex; justify-content: space-between; align-items: center;
+  font-size: 0.85rem; font-weight: 700; color: var(--text-dim);
+  margin-bottom: 10px;
+}
+.attendance-log-list { display: flex; flex-direction: column; gap: 6px; max-height: 130px; overflow-y: auto; }
+.attendance-empty { font-size: 0.82rem; color: var(--text-muted); text-align: center; padding: 12px 0; }
+.attendance-entry {
+  display: flex; justify-content: space-between; align-items: center;
+  background: rgba(16,185,129,0.08); border: 1px solid rgba(16,185,129,0.25);
+  border-radius: 8px; padding: 8px 12px; font-size: 0.85rem;
+  animation: fadeUp 0.3s ease both;
+}
+.attendance-entry .name { font-weight: 700; color: var(--green); }
+.attendance-entry .time { font-family: var(--mono); font-size: 0.75rem; color: var(--text-muted); }
+
 /* ===== RESPONSIVE ===== */
 @media (max-width: 768px) {
   /* Nav */
