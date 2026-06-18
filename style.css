@@ -713,6 +713,15 @@ footer a:hover { color: #fff; }
   /* Touch D-pad for Snake/Pong */
   .dpad { display: grid; }
   .quiz-input { font-size: 0.9rem; padding: 9px 12px; }
+
+  /* Attendance modal */
+  .attendance-modal { width: 100%; padding: 14px; gap: 10px; border-radius: 14px; max-height: 96vh; }
+  .attendance-controls { flex-direction: column; }
+  .attendance-controls .btn-play { width: 100%; }
+  .attendance-status { font-size: 0.7rem; padding: 6px 10px; }
+  .attendance-log { max-height: 150px; padding: 10px; }
+  .attendance-log-list { max-height: 100px; }
+  .attendance-entry { font-size: 0.78rem; padding: 7px 10px; }
 }
 
 @media (max-width: 480px) {
