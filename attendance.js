@@ -124,7 +124,7 @@ async function runAttendanceLoop() {
 
 async function registerFace() {
   const nameInput = document.getElementById('attendanceNameInput');
-  const name = nameInput.value.trim();
+  const name = nameInput.value.trim().slice(0, 40);
   if (!name) {
     attendanceStatus.textContent = '⚠️ Type your name first.';
     return;
@@ -160,8 +160,16 @@ function markAttendance(name) {
 
   const entry = document.createElement('div');
   entry.className = 'attendance-entry';
-  const time = new Date().toLocaleTimeString();
-  entry.innerHTML = `<span class="name">✅ ${name.toUpperCase()}</span><span class="time">${time}</span>`;
+
+  const nameSpan = document.createElement('span');
+  nameSpan.className = 'name';
+  nameSpan.textContent = `✅ ${name.toUpperCase()}`;
+
+  const timeSpan = document.createElement('span');
+  timeSpan.className = 'time';
+  timeSpan.textContent = new Date().toLocaleTimeString();
+
+  entry.append(nameSpan, timeSpan);
   attendanceLogList.prepend(entry);
 }
 

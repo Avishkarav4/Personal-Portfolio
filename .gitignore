@@ -1,0 +1,6 @@
+PycharmProjects/
+.claude/
+.idea/
+*.env
+.DS_Store
+node_modules/
