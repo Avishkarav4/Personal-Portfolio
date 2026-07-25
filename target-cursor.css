@@ -1,0 +1,77 @@
+/* ===== TARGET CURSOR — Ported from React Bits ===== */
+
+/**
+ * The cursor wrapper is `position: fixed` with zero width/height.
+ * GSAP drives x/y via translate. xPercent/yPercent: -50 centres it on
+ * the pointer. mix-blend-mode: difference makes it invert the bg colour
+ * underneath — giving that signature "inverted dot" premium feel.
+ */
+.target-cursor-wrapper {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 0;
+  height: 0;
+  pointer-events: none;
+  z-index: 9999;
+  mix-blend-mode: difference;
+  transform: translate(-50%, -50%);
+}
+
+/**
+ * The tiny centred dot — the cursor's "crosshair core".
+ */
+.target-cursor-dot {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 4px;
+  height: 4px;
+  background: #fff;
+  border-radius: 50%;
+  transform: translate(-50%, -50%);
+  will-change: transform;
+}
+
+/**
+ * Each of the four L-shaped corner brackets that expand when the cursor
+ * locks on to a `.cursor-target` element.
+ * All four share a base position at the dot's centre; GSAP offsets them.
+ */
+.target-cursor-corner {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 12px;
+  height: 12px;
+  border: 3px solid #fff;
+  will-change: transform;
+}
+
+/* Top-left corner — hide right & bottom border sides */
+.corner-tl {
+  transform: translate(-150%, -150%);
+  border-right: none;
+  border-bottom: none;
+}
+
+/* Top-right corner — hide left & bottom border sides */
+.corner-tr {
+  transform: translate(50%, -150%);
+  border-left: none;
+  border-bottom: none;
+}
+
+/* Bottom-right corner — hide left & top border sides */
+.corner-br {
+  transform: translate(50%, 50%);
+  border-left: none;
+  border-top: none;
+}
+
+/* Bottom-left corner — hide right & top border sides */
+.corner-bl {
+  transform: translate(-150%, 50%);
+  border-right: none;
+  border-top: none;
+}

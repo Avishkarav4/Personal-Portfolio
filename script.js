@@ -88,7 +88,12 @@ function updateScrollProgress() {
 window.addEventListener('scroll', updateScrollProgress);
 updateScrollProgress();
 
-// ===== CUSTOM CURSOR =====
+// ===== CUSTOM CURSOR (legacy — hidden on desktop by TargetCursor below) =====
+//
+// The original dot + ring cursor is kept in the DOM so mobile / coarse-pointer
+// devices that bypass TargetCursor still get the basic CSS cursor:none override
+// removed (TargetCursor only hides it on pointer:fine devices). On desktop the
+// two elements are made invisible once TargetCursor initialises.
 const cursorDot  = document.getElementById('cursorDot');
 const cursorRing = document.getElementById('cursorRing');
 let mouseX = 0, mouseY = 0, ringX = 0, ringY = 0;
@@ -112,6 +117,330 @@ document.querySelectorAll('a, button, .project-card, .pill, .side-dot').forEach(
   el.addEventListener('mouseenter', () => cursorRing.classList.add('hovering'));
   el.addEventListener('mouseleave', () => cursorRing.classList.remove('hovering'));
 });
+
+// ===== TARGET CURSOR — Ported from React Bits (vanilla JS + GSAP) =====
+//
+// Architecture notes:
+//   • The component is a plain class that owns all state, matching the React
+//     component's useRef approach — all mutable state lives on `this`.
+//   • `position:fixed` elements are positioned relative to the viewport UNLESS
+//     an ancestor establishes a containing block via transform/filter/etc.
+//     `_getContainingBlock` and `_getOffset` detect & compensate for this so
+//     the cursor always tracks the real mouse position correctly.
+//   • GSAP's ticker (requestAnimationFrame-based) drives the corner parallax
+//     while a target is locked, instead of a plain rAF loop — this keeps it
+//     in sync with other GSAP animations and allows clean removal via
+//     `gsap.ticker.remove()`.
+//   • On touch / mobile the constructor returns early (no DOM changes).
+(function initTargetCursor() {
+
+  // ── Mobile detection (mirrors the React component's useMemo) ──────────────
+  const hasTouchScreen  = 'ontouchstart' in window || navigator.maxTouchPoints > 0;
+  const isSmallScreen   = window.innerWidth <= 768;
+  const mobileRegex     = /android|webos|iphone|ipad|ipod|blackberry|iemobile|opera mini/i;
+  const isMobileUA      = mobileRegex.test((navigator.userAgent || '').toLowerCase());
+  const isMobile        = (hasTouchScreen && isSmallScreen) || isMobileUA;
+
+  if (isMobile) return; // bail — leave default cursor in place
+
+  // ── Config (matches the component's default props) ────────────────────────
+  const TARGET_SELECTOR    = '.cursor-target';
+  const SPIN_DURATION      = 2;          // seconds per full rotation at rest
+  const HOVER_DURATION     = 0.2;        // seconds to lock onto a target
+  const PARALLAX_ON        = true;
+  const CURSOR_COLOR       = '#ffffff';
+  const CURSOR_COLOR_ON_TARGET = undefined; // set to e.g. '#a855f7' to tint on hover
+  const BORDER_WIDTH       = 3;
+  const CORNER_SIZE        = 12;
+
+  // ── Hide the legacy cursor now that TargetCursor is active ───────────────
+  cursorDot.style.display  = 'none';
+  cursorRing.style.display = 'none';
+  // Also hide the default browser cursor site-wide
+  document.body.style.cursor = 'none';
+
+  // ── Grab DOM refs ─────────────────────────────────────────────────────────
+  const wrapper = document.getElementById('targetCursor');
+  const dot     = document.getElementById('tcDot');
+  const corners = [
+    document.getElementById('tcTL'),
+    document.getElementById('tcTR'),
+    document.getElementById('tcBR'),
+    document.getElementById('tcBL'),
+  ];
+
+  // ── Containing-block detection ────────────────────────────────────────────
+  // If any ancestor has transform / perspective / filter / will-change,
+  // `position:fixed` is positioned relative to *that* ancestor, not the
+  // viewport. We measure the offset and subtract it from mouse coordinates.
+  function getContainingBlock(el) {
+    let node = el && el.parentElement;
+    while (node && node !== document.documentElement) {
+      const s = getComputedStyle(node);
+      if (
+        s.transform !== 'none' ||
+        s.perspective !== 'none' ||
+        s.filter !== 'none' ||
+        s.willChange.includes('transform') ||
+        s.willChange.includes('perspective') ||
+        s.willChange.includes('filter') ||
+        /paint|layout|strict|content/.test(s.contain)
+      ) return node;
+      node = node.parentElement;
+    }
+    return null;
+  }
+
+  function getOffset(block) {
+    if (!block) return { x: 0, y: 0 };
+    const r = block.getBoundingClientRect();
+    return { x: r.left + block.clientLeft, y: r.top + block.clientTop };
+  }
+
+  let containingBlock = getContainingBlock(wrapper);
+
+  // ── State (mirrors the component's useRef values) ─────────────────────────
+  let activeTarget          = null;
+  let currentLeaveHandler   = null;
+  let resumeTimeout         = null;
+  let targetCornerPositions = null; // [{x,y}×4] target positions in cursor-space
+  let activeStrength        = 0;    // 0 = idle, 1 = fully locked on target
+  let spinTl                = null; // current GSAP spin timeline
+
+  // ── Initial placement ─────────────────────────────────────────────────────
+  const { x: ox, y: oy } = getOffset(containingBlock);
+  gsap.set(wrapper, {
+    xPercent: -50,
+    yPercent: -50,
+    x: window.innerWidth  / 2 - ox,
+    y: window.innerHeight / 2 - oy,
+  });
+
+  // ── Spinning animation at rest ────────────────────────────────────────────
+  // The four corner brackets spin continuously around the dot when idle,
+  // giving that premium "scanning" feel. We use a GSAP timeline with
+  // repeat:-1 so it loops forever, and kill/restart it around target locks.
+  function createSpinTimeline() {
+    if (spinTl) spinTl.kill();
+    spinTl = gsap.timeline({ repeat: -1 })
+      .to(wrapper, { rotation: '+=360', duration: SPIN_DURATION, ease: 'none' });
+  }
+  createSpinTimeline();
+
+  // ── GSAP ticker fn — drives corner parallax while locked on target ────────
+  // Instead of a plain rAF loop we hook into GSAP's own ticker so all
+  // animations stay synchronised and cleanup is a single `gsap.ticker.remove`.
+  let tickerAttached = false;
+
+  function cornerTickerFn() {
+    if (!targetCornerPositions || activeStrength === 0) return;
+
+    const cx = gsap.getProperty(wrapper, 'x');
+    const cy = gsap.getProperty(wrapper, 'y');
+
+    corners.forEach((corner, i) => {
+      const curX = gsap.getProperty(corner, 'x');
+      const curY = gsap.getProperty(corner, 'y');
+
+      const tgX = targetCornerPositions[i].x - cx;
+      const tgY = targetCornerPositions[i].y - cy;
+
+      const finalX = curX + (tgX - curX) * activeStrength;
+      const finalY = curY + (tgY - curY) * activeStrength;
+
+      // Once fully locked (strength ≈ 1), use a gentle parallax lerp if
+      // PARALLAX_ON; otherwise snap with duration 0.
+      const dur = activeStrength >= 0.99 ? (PARALLAX_ON ? 0.2 : 0) : 0.05;
+
+      gsap.to(corner, {
+        x: finalX,
+        y: finalY,
+        duration: dur,
+        ease: dur === 0 ? 'none' : 'power1.out',
+        overwrite: 'auto',
+      });
+    });
+  }
+
+  // ── Mouse move — moves the wrapper to the cursor position ─────────────────
+  function onMouseMove(e) {
+    const { x: offX, y: offY } = getOffset(containingBlock);
+    gsap.to(wrapper, {
+      x: e.clientX - offX,
+      y: e.clientY - offY,
+      duration: 0.1,
+      ease: 'power3.out',
+    });
+  }
+  window.addEventListener('mousemove', onMouseMove);
+
+  // ── Mouse down / up — scale the dot on click ──────────────────────────────
+  function onMouseDown() {
+    gsap.to(dot,     { scale: 0.7, duration: 0.3 });
+    gsap.to(wrapper, { scale: 0.9, duration: 0.2 });
+  }
+  function onMouseUp() {
+    gsap.to(dot,     { scale: 1, duration: 0.3 });
+    gsap.to(wrapper, { scale: 1, duration: 0.2 });
+  }
+  window.addEventListener('mousedown', onMouseDown);
+  window.addEventListener('mouseup',   onMouseUp);
+
+  // ── Scroll handler — re-check if the cursor drifted off the locked target ─
+  function onScroll() {
+    if (!activeTarget) return;
+    const offX = getOffset(containingBlock).x;
+    const offY = getOffset(containingBlock).y;
+    const mx   = gsap.getProperty(wrapper, 'x') + offX;
+    const my   = gsap.getProperty(wrapper, 'y') + offY;
+    const el   = document.elementFromPoint(mx, my);
+    const still =
+      el && (el === activeTarget || el.closest(TARGET_SELECTOR) === activeTarget);
+    if (!still && currentLeaveHandler) currentLeaveHandler();
+  }
+  window.addEventListener('scroll', onScroll, { passive: true });
+
+  // ── Helper: clean up the current leave listener ───────────────────────────
+  function cleanupTarget(target) {
+    if (currentLeaveHandler) {
+      target.removeEventListener('mouseleave', currentLeaveHandler);
+      currentLeaveHandler = null;
+    }
+  }
+
+  // ── Enter handler — fires when the mouse enters any element ───────────────
+  // We walk up the DOM from the event target to find the nearest
+  // `.cursor-target` ancestor (matching the React component's logic).
+  function onMouseOver(e) {
+    // Walk up to find the nearest cursor-target
+    const allTargets = [];
+    let cur = e.target;
+    while (cur && cur !== document.body) {
+      if (cur.matches && cur.matches(TARGET_SELECTOR)) allTargets.push(cur);
+      cur = cur.parentElement;
+    }
+    const target = allTargets[0] || null;
+    if (!target || !wrapper) return;
+    if (activeTarget === target) return; // already locked
+
+    // Switch away from the previous target if needed
+    if (activeTarget) cleanupTarget(activeTarget);
+    if (resumeTimeout) { clearTimeout(resumeTimeout); resumeTimeout = null; }
+
+    activeTarget = target;
+    corners.forEach(c => gsap.killTweensOf(c, 'x,y'));
+
+    // Pause the spin and snap rotation to 0 while locked
+    gsap.killTweensOf(wrapper, 'rotation');
+    spinTl && spinTl.pause();
+    gsap.set(wrapper, { rotation: 0 });
+
+    // Optionally tint the cursor to CURSOR_COLOR_ON_TARGET
+    if (CURSOR_COLOR_ON_TARGET) {
+      gsap.to(corners, { borderColor: CURSOR_COLOR_ON_TARGET, duration: 0.15, ease: 'power2.out' });
+      gsap.to(dot,     { backgroundColor: CURSOR_COLOR_ON_TARGET, duration: 0.15, ease: 'power2.out' });
+    }
+
+    // Compute where each corner bracket should expand to (the 4 corners of the
+    // bounding rect, offset outward by BORDER_WIDTH so they frame the element)
+    const rect = target.getBoundingClientRect();
+    const { x: offX, y: offY } = getOffset(containingBlock);
+    const cx = gsap.getProperty(wrapper, 'x');
+    const cy = gsap.getProperty(wrapper, 'y');
+
+    targetCornerPositions = [
+      { x: rect.left  - BORDER_WIDTH              - offX, y: rect.top    - BORDER_WIDTH              - offY }, // TL
+      { x: rect.right + BORDER_WIDTH - CORNER_SIZE - offX, y: rect.top    - BORDER_WIDTH              - offY }, // TR
+      { x: rect.right + BORDER_WIDTH - CORNER_SIZE - offX, y: rect.bottom + BORDER_WIDTH - CORNER_SIZE - offY }, // BR
+      { x: rect.left  - BORDER_WIDTH              - offX, y: rect.bottom + BORDER_WIDTH - CORNER_SIZE - offY }, // BL
+    ];
+
+    // Attach the ticker and animate activeStrength from 0 → 1
+    if (!tickerAttached) {
+      gsap.ticker.add(cornerTickerFn);
+      tickerAttached = true;
+    }
+    // Animate the strength object — GSAP treats plain objects as animatable targets
+    gsap.to({ val: activeStrength }, {
+      val: 1,
+      duration: HOVER_DURATION,
+      ease: 'power2.out',
+      onUpdate: function() { activeStrength = this.targets()[0].val; },
+    });
+
+    // Immediately tween corners toward their target positions
+    corners.forEach((corner, i) => {
+      gsap.to(corner, {
+        x: targetCornerPositions[i].x - cx,
+        y: targetCornerPositions[i].y - cy,
+        duration: 0.2,
+        ease: 'power2.out',
+      });
+    });
+
+    // ── Leave handler — fires when the mouse leaves this specific target ─────
+    function leaveHandler() {
+      // Detach ticker
+      gsap.ticker.remove(cornerTickerFn);
+      tickerAttached = false;
+
+      activeStrength        = 0;
+      targetCornerPositions = null;
+      activeTarget          = null;
+
+      // Revert cursor color if we tinted it
+      if (CURSOR_COLOR_ON_TARGET) {
+        gsap.to(corners, { borderColor: CURSOR_COLOR, duration: 0.15, ease: 'power2.out' });
+        gsap.to(dot,     { backgroundColor: CURSOR_COLOR, duration: 0.15, ease: 'power2.out' });
+      }
+
+      // Retract the corner brackets back to their resting positions
+      corners.forEach(c => gsap.killTweensOf(c, 'x,y'));
+      const restPositions = [
+        { x: -CORNER_SIZE * 1.5, y: -CORNER_SIZE * 1.5 },
+        { x:  CORNER_SIZE * 0.5, y: -CORNER_SIZE * 1.5 },
+        { x:  CORNER_SIZE * 0.5, y:  CORNER_SIZE * 0.5 },
+        { x: -CORNER_SIZE * 1.5, y:  CORNER_SIZE * 0.5 },
+      ];
+      const tl = gsap.timeline();
+      corners.forEach((corner, i) => {
+        tl.to(corner, { x: restPositions[i].x, y: restPositions[i].y, duration: 0.3, ease: 'power3.out' }, 0);
+      });
+
+      // Resume spinning after a short delay (matches React component behaviour)
+      resumeTimeout = setTimeout(() => {
+        if (!activeTarget && wrapper && spinTl) {
+          const curRot       = gsap.getProperty(wrapper, 'rotation');
+          const normalised   = curRot % 360;
+          spinTl.kill();
+          // Pick up the spin from where we left off so there's no jump
+          spinTl = gsap.timeline({ repeat: -1 })
+            .to(wrapper, { rotation: '+=360', duration: SPIN_DURATION, ease: 'none' });
+          gsap.to(wrapper, {
+            rotation: normalised + 360,
+            duration: SPIN_DURATION * (1 - normalised / 360),
+            ease: 'none',
+            onComplete: () => spinTl && spinTl.restart(),
+          });
+        }
+        resumeTimeout = null;
+      }, 50);
+
+      cleanupTarget(target);
+    }
+
+    currentLeaveHandler = leaveHandler;
+    target.addEventListener('mouseleave', leaveHandler);
+  }
+
+  window.addEventListener('mouseover', onMouseOver, { passive: true });
+
+  // ── Resize — recompute the containing block after layout changes ──────────
+  window.addEventListener('resize', () => {
+    containingBlock = getContainingBlock(wrapper);
+  });
+
+}()); // IIFE — keeps all TargetCursor state out of global scope
 
 // ===== SIDE SCROLL-SPY DOTS =====
 const sideDots = document.querySelectorAll('.side-dot');
