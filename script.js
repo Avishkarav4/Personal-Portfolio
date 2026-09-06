@@ -705,7 +705,7 @@ function stepSnake() {
 function drawSnake() {
   const s = snakeState;
   const W = gameCanvas.width, H = gameCanvas.height;
-  gc.fillStyle = '#0d0d1a'; gc.fillRect(0,0,W,H);
+  gc.fillStyle = '#0c1017'; gc.fillRect(0,0,W,H);
 
   // Grid dots
   gc.fillStyle = 'rgba(255,255,255,0.03)';
@@ -714,8 +714,8 @@ function drawSnake() {
   }
 
   // Food
-  gc.fillStyle = '#ef4444';
-  gc.shadowColor = '#ef4444'; gc.shadowBlur = 12;
+  gc.fillStyle = '#ff003c';
+  gc.shadowColor = '#ff003c'; gc.shadowBlur = 12;
   gc.beginPath();
   gc.arc(s.food.x*CELL+CELL/2, s.food.y*CELL+CELL/2, CELL/2-2, 0, Math.PI*2);
   gc.fill();
@@ -724,9 +724,9 @@ function drawSnake() {
   // Snake
   s.snake.forEach((seg, i) => {
     const ratio = 1 - i / s.snake.length;
-    gc.fillStyle = i === 0 ? '#10b981'
+    gc.fillStyle = i === 0 ? '#00ff41'
       : `hsl(${160 - i*2}, ${70+ratio*30}%, ${40+ratio*20}%)`;
-    gc.shadowColor = i === 0 ? '#10b981' : 'transparent';
+    gc.shadowColor = i === 0 ? '#00ff41' : 'transparent';
     gc.shadowBlur  = i === 0 ? 10 : 0;
     const pad = i === 0 ? 1 : 2;
     gc.beginPath();
@@ -737,10 +737,10 @@ function drawSnake() {
 
   // Game over
   if (s.over) {
-    gc.fillStyle = 'rgba(0,0,0,0.65)'; gc.fillRect(0,0,W,H);
-    gc.fillStyle = '#fff'; gc.textAlign = 'center';
-    gc.font = 'bold 28px Inter'; gc.fillText('Game Over', W/2, H/2-20);
-    gc.font = '16px Inter'; gc.fillStyle = '#94a3b8';
+    gc.fillStyle = 'rgba(0,0,0,0.8)'; gc.fillRect(0,0,W,H);
+    gc.fillStyle = '#00ff41'; gc.textAlign = 'center';
+    gc.font = 'bold 28px Orbitron'; gc.fillText('Game Over', W/2, H/2-20);
+    gc.font = '16px "Share Tech Mono"'; gc.fillStyle = '#00f0ff';
     gc.fillText(`Score: ${s.score}  —  Press ↺ to restart`, W/2, H/2+16);
   }
 }
@@ -845,7 +845,7 @@ function drawPong() {
   const b = p.ball, pl = p.player, ai = p.ai;
 
   // BG
-  gc.fillStyle = '#0d0d1a'; gc.fillRect(0,0,W,H);
+  gc.fillStyle = '#0c1017'; gc.fillRect(0,0,W,H);
 
   // Centre line
   gc.setLineDash([8,8]); gc.strokeStyle = 'rgba(255,255,255,0.1)'; gc.lineWidth = 2;
@@ -853,7 +853,7 @@ function drawPong() {
   gc.setLineDash([]);
 
   // Scores on canvas
-  gc.font = `bold ${W*0.07}px JetBrains Mono`; gc.textAlign = 'center'; gc.fillStyle = 'rgba(255,255,255,0.15)';
+  gc.font = `bold ${W*0.07}px Orbitron`; gc.textAlign = 'center'; gc.fillStyle = 'rgba(255,255,255,0.15)';
   gc.fillText(pl.score, W*0.25, H*0.18);
   gc.fillText(ai.score, W*0.75, H*0.18);
 
@@ -864,29 +864,29 @@ function drawPong() {
     gc.beginPath(); gc.roundRect(x, y, PW, PH, 4); gc.fill();
     gc.shadowBlur = 0;
   };
-  drawPaddle(PW*0.6, pl.y, '#10b981');
-  drawPaddle(W - PW*1.6, ai.y, '#7c3aed');
+  drawPaddle(PW*0.6, pl.y, '#00ff41');
+  drawPaddle(W - PW*1.6, ai.y, '#ff003c');
 
   // Ball
-  gc.shadowColor = '#f59e0b'; gc.shadowBlur = 20;
-  gc.fillStyle = '#f59e0b';
+  gc.shadowColor = '#00f0ff'; gc.shadowBlur = 20;
+  gc.fillStyle = '#00f0ff';
   gc.beginPath(); gc.arc(b.x, b.y, b.r, 0, Math.PI*2); gc.fill();
   gc.shadowBlur = 0;
 
   // Labels
-  gc.font = `${W*0.022}px Inter`; gc.fillStyle = '#64748b'; gc.textAlign = 'center';
+  gc.font = `${W*0.022}px "Share Tech Mono"`; gc.fillStyle = '#64748b'; gc.textAlign = 'center';
   gc.fillText('YOU', W*0.25, H*0.94);
   gc.fillText('BOT', W*0.75, H*0.94);
   // First to 5 label
-  gc.font = `${W*0.018}px Inter`; gc.fillStyle = 'rgba(255,255,255,0.2)';
+  gc.font = `${W*0.018}px "Share Tech Mono"`; gc.fillStyle = 'rgba(255,255,255,0.2)';
   gc.fillText('first to 5', W/2, H*0.94);
 
   // Game over
   if (p.over) {
     gc.fillStyle = 'rgba(0,0,0,0.7)'; gc.fillRect(0,0,W,H);
     gc.fillStyle = '#fff'; gc.textAlign = 'center';
-    gc.font = `bold ${W*0.055}px Inter`; gc.fillText(p.winner, W/2, H/2-12);
-    gc.font = `${W*0.03}px Inter`; gc.fillStyle = '#94a3b8';
+    gc.font = `bold ${W*0.055}px Orbitron`; gc.fillText(p.winner, W/2, H/2-12);
+    gc.font = `${W*0.03}px "Share Tech Mono"`; gc.fillStyle = '#00f0ff';
     gc.fillText('Press ↺ to play again', W/2, H/2+24);
   }
 }

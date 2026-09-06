@@ -96,7 +96,7 @@ async function runAttendanceLoop() {
       });
 
       const isMatch = bestMatch && bestDist < MATCH_THRESHOLD;
-      const color = isMatch ? '#10b981' : '#f59e0b';
+      const color = isMatch ? '#00ff41' : '#ff003c';
       const label = isMatch ? bestMatch.name.toUpperCase() : 'UNKNOWN';
 
       ctx.strokeStyle = color;
@@ -105,7 +105,7 @@ async function runAttendanceLoop() {
       ctx.fillStyle = color;
       ctx.fillRect(x, y + height, width, 24);
       ctx.fillStyle = '#fff';
-      ctx.font = 'bold 13px Inter';
+      ctx.font = 'bold 13px Orbitron';
       ctx.textAlign = 'left';
       ctx.fillText(label, x + 6, y + height + 17);
 

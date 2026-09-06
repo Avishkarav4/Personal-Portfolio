@@ -14,7 +14,6 @@
   height: 0;
   pointer-events: none;
   z-index: 9999;
-  mix-blend-mode: difference;
   transform: translate(-50%, -50%);
 }
 
@@ -27,7 +26,8 @@
   top: 50%;
   width: 4px;
   height: 4px;
-  background: #fff;
+  background: #00ff41;
+  box-shadow: 0 0 8px #00ff41;
   border-radius: 50%;
   transform: translate(-50%, -50%);
   will-change: transform;
@@ -44,7 +44,8 @@
   top: 50%;
   width: 12px;
   height: 12px;
-  border: 3px solid #fff;
+  border: 3px solid #00ff41;
+  box-shadow: 0 0 10px rgba(0,255,65,0.5), inset 0 0 10px rgba(0,255,65,0.5);
   will-change: transform;
 }
 
