@@ -32,6 +32,7 @@ async function loadFaceModels() {
 async function openAttendance() {
   attendanceOverlay.classList.add('open');
   document.body.style.overflow = 'hidden';
+  document.body.style.cursor = 'auto';
   attendanceStatus.textContent = 'Requesting camera access…';
 
   try {
@@ -61,6 +62,7 @@ function closeAttendance(e) {
   if (e && e.target !== attendanceOverlay) return;
   attendanceOverlay.classList.remove('open');
   document.body.style.overflow = '';
+  document.body.style.cursor = 'none';
   if (attendanceLoopId) { cancelAnimationFrame(attendanceLoopId); attendanceLoopId = null; }
   if (attendanceStream) {
     attendanceStream.getTracks().forEach(track => track.stop());

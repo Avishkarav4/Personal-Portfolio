@@ -611,6 +611,7 @@ let gameLoop   = null;
 function openGame(type) {
   overlay.classList.add('open');
   document.body.style.overflow = 'hidden';
+  document.body.style.cursor = 'auto';
   activeGame = type;
   document.getElementById('quizInputRow').style.display = type === 'quiz' ? 'flex' : 'none';
   document.getElementById('dpad').style.display = (type === 'snake' || type === 'pong') ? '' : 'none';
@@ -627,6 +628,7 @@ function closeGame(e) {
   if (e && e.target !== overlay) return;
   overlay.classList.remove('open');
   document.body.style.overflow = '';
+  document.body.style.cursor = 'none';
   if (gameLoop) { clearInterval(gameLoop); cancelAnimationFrame(gameLoop); gameLoop = null; }
   if (quizTimer) { clearInterval(quizTimer); quizTimer = null; }
   document.getElementById('quizInputRow').style.display = 'none';
