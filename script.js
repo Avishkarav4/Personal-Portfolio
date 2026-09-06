@@ -654,7 +654,7 @@ let snakeState = {};
 function initSnake() {
   gameTitle.textContent = '🐍 Snake';
   gameHint.textContent  = 'Arrow keys / WASD to move';
-  const size = Math.min(500, Math.floor((window.innerWidth * 0.92) / CELL) * CELL);
+  const size = Math.min(500, Math.floor((window.innerWidth - 60) / CELL) * CELL);
   gameCanvas.width  = size;
   gameCanvas.height = size;
   const cols = size / CELL, rows = size / CELL;
@@ -754,7 +754,7 @@ let pongRAF   = null;
 function initPong() {
   gameTitle.textContent = '🏓 Pong';
   gameHint.textContent  = 'W/S — move paddle  |  vs Bot';
-  const W = Math.min(640, Math.floor(window.innerWidth * 0.92));
+  const W = Math.min(640, Math.floor(window.innerWidth - 60));
   const H = Math.round(W * 0.6);
   gameCanvas.width = W; gameCanvas.height = H;
   const PH = H * 0.22, PW = W * 0.022;
@@ -952,7 +952,7 @@ function initQuiz() {
   gameHint.textContent  = 'Name all 36 states & UTs — 15 min';
 
   // India is roughly square in projection, slight portrait
-  const W = Math.min(500, Math.floor(window.innerWidth * 0.92));
+  const W = Math.min(500, Math.floor(window.innerWidth - 60));
   const H = Math.round(W * 1.12);
   gameCanvas.width = W; gameCanvas.height = H;
 
@@ -1181,7 +1181,7 @@ function initHirst() {
   document.getElementById('scoreLabel').innerHTML = 'Dots: <span id="scoreDisplay">100</span>';
   refreshScoreEl();
 
-  const size = Math.min(520, Math.floor(window.innerWidth * 0.9));
+  const size = Math.min(520, Math.floor(window.innerWidth - 60));
   gameCanvas.width = size;
   gameCanvas.height = size;
 
@@ -1228,7 +1228,7 @@ function initFlashcards() {
   gameHint.textContent  = 'Click card to flip · ← Skip  → Got it!';
   document.getElementById('dpad').style.display = '';
 
-  const W = Math.min(420, Math.floor(window.innerWidth * 0.85));
+  const W = Math.min(420, Math.floor(window.innerWidth - 60));
   const H = Math.round(W * 0.62);
   gameCanvas.width = W; gameCanvas.height = H;
 
@@ -1311,8 +1311,9 @@ gameCanvas.addEventListener('click', () => {
 // Keyboard listeners for pong
 document.addEventListener('keydown', e => {
   if (pongState.keys) pongState.keys[e.key] = true;
-  // Prevent page scroll when playing
-  if (['ArrowUp','ArrowDown',' '].includes(e.key) && activeGame) e.preventDefault();
+  // Prevent page scroll when playing, but allow spacebar in quiz
+  if (['ArrowUp','ArrowDown'].includes(e.key) && activeGame) e.preventDefault();
+  if (e.key === ' ' && (activeGame === 'snake' || activeGame === 'pong' || activeGame === 'flashcards')) e.preventDefault();
   // Snake direction
   if (activeGame === 'snake' && snakeState) {
     const d = snakeState.dir;
