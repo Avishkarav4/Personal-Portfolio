@@ -4,3 +4,4 @@ PycharmProjects/
 *.env
 .DS_Store
 node_modules/
+Foundry/
