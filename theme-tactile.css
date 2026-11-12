@@ -80,7 +80,7 @@ html[data-theme="tactile"] {
   --t-shadow-md: 0 12px 32px rgba(31, 28, 26, 0.08);
   --t-shadow-dark: 0 14px 36px rgba(0, 0, 0, 0.24);
   --t-font: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-  cursor: auto;
+  cursor: auto !important;
 }
 
 html[data-theme="tactile"] body {
@@ -89,6 +89,7 @@ html[data-theme="tactile"] body {
   background-image: none;
   color: var(--t-text-dark);
   line-height: 1.6;
+  cursor: auto !important;
 }
 
 /* Disable CRT scanlines & custom cyberpunk cursor in tactile mode */
@@ -105,7 +106,7 @@ html[data-theme="tactile"] .cursor-ring {
 html[data-theme="tactile"] a,
 html[data-theme="tactile"] button,
 html[data-theme="tactile"] .cursor-target {
-  cursor: pointer;
+  cursor: pointer !important;
 }
 
 html[data-theme="tactile"] h1,

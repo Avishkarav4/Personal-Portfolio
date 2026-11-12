@@ -1360,6 +1360,8 @@ cards.forEach(card => {
     if (toggleLabel) {
       toggleLabel.textContent = isTactile ? 'Tactile UI' : 'Cyber UI';
     }
+    const isCoarse = window.matchMedia && window.matchMedia('(pointer: coarse)').matches;
+    document.body.style.cursor = isTactile || isCoarse ? 'auto' : 'none';
   }
 
   const initial = document.documentElement.getAttribute('data-theme') || 'tactile';
