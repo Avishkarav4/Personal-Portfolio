@@ -1345,3 +1345,28 @@ cards.forEach(card => {
     card.style.transform = '';
   });
 });
+
+// ===== UI THEME TOGGLE (Tactile <-> Cyberpunk) =====
+(function initThemeToggle() {
+  const toggleBtn = document.getElementById('themeToggle');
+  const toggleLabel = document.getElementById('themeToggleLabel');
+  if (!toggleBtn) return;
+
+  function applyTheme(theme) {
+    const isTactile = theme === 'tactile';
+    document.documentElement.setAttribute('data-theme', theme);
+    localStorage.setItem('portfolio-theme', theme);
+    toggleBtn.setAttribute('aria-checked', String(isTactile));
+    if (toggleLabel) {
+      toggleLabel.textContent = isTactile ? 'Tactile UI' : 'Cyber UI';
+    }
+  }
+
+  const initial = document.documentElement.getAttribute('data-theme') || 'tactile';
+  applyTheme(initial);
+
+  toggleBtn.addEventListener('click', () => {
+    const current = document.documentElement.getAttribute('data-theme') || 'tactile';
+    applyTheme(current === 'tactile' ? 'cyberpunk' : 'tactile');
+  });
+})();

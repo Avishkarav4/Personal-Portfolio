@@ -1,0 +1,1095 @@
+/* ==========================================================================
+   WARM TACTILE UI THEME (Inspired by Smart Home Minimalist Aesthetic)
+   Active when <html data-theme="tactile"> is set.
+   Zero content changes — pure visual & layout transformation.
+   ========================================================================== */
+
+/* ===== THEME TOGGLE BUTTON (BASE / CYBERPUNK MODE STYLES) ===== */
+.nav-actions {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.theme-toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  padding: 6px 12px 6px 8px;
+  background: rgba(0, 255, 65, 0.08);
+  border: 1px solid var(--neon-green);
+  color: var(--neon-green);
+  font-family: var(--mono);
+  font-size: 0.78rem;
+  cursor: pointer;
+  transition: all 0.25s cubic-bezier(0.2, 0.8, 0.2, 1);
+  white-space: nowrap;
+}
+
+.theme-toggle:hover {
+  background: rgba(0, 255, 65, 0.16);
+  box-shadow: 0 0 12px rgba(0, 255, 65, 0.25);
+}
+
+.theme-toggle-track {
+  position: relative;
+  width: 38px;
+  height: 22px;
+  background: rgba(255, 255, 255, 0.12);
+  border-radius: 9999px;
+  transition: background 0.25s ease;
+  flex-shrink: 0;
+}
+
+.theme-toggle-thumb {
+  position: absolute;
+  top: 3px;
+  left: 3px;
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  background: var(--neon-green);
+  transition: transform 0.25s cubic-bezier(0.34, 1.56, 0.64, 1), background 0.25s ease;
+}
+
+.theme-toggle-label {
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+}
+
+/* ==========================================================================
+   TACTILE THEME OVERRIDES
+   ========================================================================== */
+html[data-theme="tactile"] {
+  --t-dark: #23201d;
+  --t-dark-elevated: #2e2a26;
+  --t-dark-pill: #3a3530;
+  --t-light: #f3f2ee;
+  --t-light-card: #ffffff;
+  --t-light-sub: #eae8e3;
+  --t-accent: #ee723f;
+  --t-accent-hover: #f58252;
+  --t-accent-soft: rgba(238, 114, 63, 0.14);
+  --t-text-dark: #1f1c1a;
+  --t-text-dark-muted: #7b756f;
+  --t-text-light: #f7f6f4;
+  --t-text-light-muted: #a8a19a;
+  --t-border-light: rgba(31, 28, 26, 0.08);
+  --t-border-dark: rgba(255, 255, 255, 0.08);
+  --t-shadow-sm: 0 4px 16px rgba(31, 28, 26, 0.05);
+  --t-shadow-md: 0 12px 32px rgba(31, 28, 26, 0.08);
+  --t-shadow-dark: 0 14px 36px rgba(0, 0, 0, 0.24);
+  --t-font: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  cursor: auto;
+}
+
+html[data-theme="tactile"] body {
+  font-family: var(--t-font);
+  background: var(--t-light);
+  background-image: none;
+  color: var(--t-text-dark);
+  line-height: 1.6;
+}
+
+/* Disable CRT scanlines & custom cyberpunk cursor in tactile mode */
+html[data-theme="tactile"] body::after {
+  display: none;
+}
+
+html[data-theme="tactile"] .target-cursor-wrapper,
+html[data-theme="tactile"] .cursor-dot,
+html[data-theme="tactile"] .cursor-ring {
+  display: none !important;
+}
+
+html[data-theme="tactile"] a,
+html[data-theme="tactile"] button,
+html[data-theme="tactile"] .cursor-target {
+  cursor: pointer;
+}
+
+html[data-theme="tactile"] h1,
+html[data-theme="tactile"] h2,
+html[data-theme="tactile"] h3,
+html[data-theme="tactile"] h4,
+html[data-theme="tactile"] h5,
+html[data-theme="tactile"] h6 {
+  font-family: var(--t-font);
+  text-transform: none;
+  letter-spacing: -0.02em;
+}
+
+html[data-theme="tactile"] ::selection {
+  background: var(--t-accent);
+  color: #ffffff;
+}
+
+/* ===== SCROLLBAR & PROGRESS ===== */
+html[data-theme="tactile"] ::-webkit-scrollbar-track {
+  background: var(--t-light);
+  border-left: none;
+}
+
+html[data-theme="tactile"] ::-webkit-scrollbar-thumb {
+  background: #c8c3bc;
+  border-radius: 9999px;
+  border: 2px solid var(--t-light);
+}
+
+html[data-theme="tactile"] ::-webkit-scrollbar-thumb:hover {
+  background: var(--t-accent);
+}
+
+html[data-theme="tactile"] .scroll-progress {
+  height: 3px;
+  background: var(--t-accent);
+  box-shadow: none;
+}
+
+/* ===== SIDE DOTS & BACK TO TOP ===== */
+html[data-theme="tactile"] .side-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  transform: none;
+  border: 2px solid rgba(123, 117, 111, 0.45);
+  background: transparent;
+}
+
+html[data-theme="tactile"] .side-dot::after {
+  content: attr(data-label);
+  transform: translateY(-50%);
+  border-radius: 9999px;
+  background: var(--t-dark);
+  color: var(--t-text-light);
+  border: 1px solid var(--t-border-dark);
+  font-family: var(--t-font);
+  font-weight: 600;
+  padding: 4px 12px;
+}
+
+html[data-theme="tactile"] .side-dot:hover::after {
+  transform: translateY(-50%) translateX(-4px);
+}
+
+html[data-theme="tactile"] .side-dot:hover,
+html[data-theme="tactile"] .side-dot.active {
+  background: var(--t-accent);
+  border-color: var(--t-accent);
+  box-shadow: 0 0 0 4px var(--t-accent-soft);
+  transform: scale(1.2);
+}
+
+html[data-theme="tactile"] .back-to-top {
+  clip-path: none;
+  border-radius: 50%;
+  background: var(--t-accent);
+  border: none;
+  color: #ffffff;
+  font-family: var(--t-font);
+  font-weight: 700;
+  box-shadow: 0 8px 24px rgba(238, 114, 63, 0.35);
+}
+
+html[data-theme="tactile"] .back-to-top:hover {
+  background: var(--t-accent-hover);
+  color: #ffffff;
+  transform: translateY(-3px);
+  box-shadow: 0 12px 28px rgba(238, 114, 63, 0.45);
+}
+
+/* ===== NAVBAR (FLOATING ROUNDED PILL BAR) ===== */
+html[data-theme="tactile"] #nav {
+  background: rgba(35, 32, 29, 0.88);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border-bottom: 1px solid var(--t-border-dark);
+}
+
+html[data-theme="tactile"] #nav::after {
+  display: none;
+}
+
+html[data-theme="tactile"] .nav-inner {
+  height: 76px;
+}
+
+html[data-theme="tactile"] .nav-logo-img {
+  clip-path: none;
+  border-radius: 50%;
+  border: 2px solid var(--t-accent);
+  width: 44px;
+  height: 44px;
+}
+
+html[data-theme="tactile"] .nav-logo:hover .nav-logo-img {
+  filter: none;
+  box-shadow: 0 0 0 4px var(--t-accent-soft);
+  transform: scale(1.05);
+}
+
+html[data-theme="tactile"] .nav-links {
+  gap: 8px;
+}
+
+html[data-theme="tactile"] .nav-links a {
+  font-family: var(--t-font);
+  font-size: 0.9rem;
+  font-weight: 500;
+  text-transform: none;
+  color: var(--t-text-light-muted);
+  padding: 8px 16px;
+  border-radius: 9999px;
+}
+
+html[data-theme="tactile"] .nav-links a::before {
+  display: none;
+}
+
+html[data-theme="tactile"] .nav-links a:hover {
+  color: var(--t-text-light);
+  background: var(--t-dark-pill);
+}
+
+html[data-theme="tactile"] .nav-cta {
+  clip-path: none;
+  background: var(--t-accent) !important;
+  color: #ffffff !important;
+  border: none !important;
+  padding: 9px 20px !important;
+  font-weight: 600 !important;
+  border-radius: 9999px !important;
+}
+
+html[data-theme="tactile"] .nav-cta:hover {
+  background: var(--t-accent-hover) !important;
+  box-shadow: 0 6px 18px rgba(238, 114, 63, 0.35) !important;
+}
+
+/* Tactile Toggle Switch inside Navbar */
+html[data-theme="tactile"] .theme-toggle {
+  background: var(--t-dark-elevated);
+  border: 1px solid var(--t-border-dark);
+  border-radius: 9999px;
+  color: var(--t-text-light);
+  font-family: var(--t-font);
+  font-weight: 600;
+  font-size: 0.8rem;
+  padding: 6px 14px 6px 6px;
+}
+
+html[data-theme="tactile"] .theme-toggle:hover {
+  background: var(--t-dark-pill);
+  box-shadow: none;
+}
+
+html[data-theme="tactile"] .theme-toggle-track {
+  background: var(--t-accent);
+}
+
+html[data-theme="tactile"] .theme-toggle-thumb {
+  background: #ffffff;
+  transform: translateX(16px);
+}
+
+html[data-theme="tactile"] .theme-toggle-label {
+  text-transform: none;
+  letter-spacing: 0;
+}
+
+html[data-theme="tactile"] .hamburger span {
+  background: var(--t-text-light);
+  border-radius: 9999px;
+}
+
+html[data-theme="tactile"] .mobile-menu {
+  background: var(--t-dark-elevated);
+  border-top: 1px solid var(--t-border-dark);
+  border-radius: 0 0 28px 28px;
+}
+
+html[data-theme="tactile"] .mobile-menu a {
+  font-family: var(--t-font);
+  text-transform: none;
+  color: var(--t-text-light);
+  border-bottom: 1px solid var(--t-border-dark);
+}
+
+html[data-theme="tactile"] .mobile-menu a:hover {
+  color: var(--t-accent);
+}
+
+/* ===== HERO (DARK CHARCOAL ROUNDED TOP SHEET) ===== */
+html[data-theme="tactile"] #hero {
+  background: var(--t-dark);
+  color: var(--t-text-light);
+  border-radius: 0 0 44px 44px;
+  padding-bottom: 40px;
+  box-shadow: var(--t-shadow-dark);
+}
+
+html[data-theme="tactile"] #stars {
+  opacity: 0;
+}
+
+html[data-theme="tactile"] .hero-content {
+  max-width: 1080px;
+  padding: 120px 24px 60px;
+}
+
+html[data-theme="tactile"] .hero-tag {
+  clip-path: none;
+  border-radius: 9999px;
+  background: var(--t-accent);
+  border: none;
+  color: #ffffff;
+  font-family: var(--t-font);
+  font-weight: 600;
+  font-size: 0.9rem;
+  padding: 7px 18px;
+  box-shadow: 0 6px 20px rgba(238, 114, 63, 0.3);
+}
+
+html[data-theme="tactile"] .hero-tag::before {
+  display: none;
+}
+
+html[data-theme="tactile"] .hero-name {
+  font-size: clamp(2.8rem, 7vw, 5.2rem);
+  font-weight: 800;
+  color: var(--t-text-light);
+  text-shadow: none;
+  letter-spacing: -0.03em;
+  margin-bottom: 12px;
+}
+
+html[data-theme="tactile"] .hero-name::after {
+  display: none;
+}
+
+html[data-theme="tactile"] .hero-roles {
+  font-family: var(--t-font);
+  font-weight: 600;
+  font-size: clamp(1.2rem, 2.6vw, 1.65rem);
+  margin: 14px 0 24px;
+}
+
+html[data-theme="tactile"] .role-prefix {
+  color: var(--t-text-light-muted);
+}
+
+html[data-theme="tactile"] .typewriter {
+  color: var(--t-accent);
+  text-shadow: none;
+}
+
+html[data-theme="tactile"] .cursor {
+  color: var(--t-accent);
+}
+
+html[data-theme="tactile"] .hero-bio {
+  font-size: 1.08rem;
+  color: var(--t-text-light-muted);
+  border-left: none;
+  background: var(--t-dark-elevated);
+  border: 1px solid var(--t-border-dark);
+  padding: 20px 24px;
+  border-radius: 24px;
+  max-width: 680px;
+  margin-bottom: 32px;
+}
+
+html[data-theme="tactile"] .hero-btns {
+  gap: 14px;
+}
+
+html[data-theme="tactile"] .btn {
+  clip-path: none;
+  border-radius: 9999px;
+  font-family: var(--t-font);
+  text-transform: none;
+  letter-spacing: 0;
+  font-weight: 600;
+  font-size: 0.95rem;
+  padding: 14px 28px;
+}
+
+html[data-theme="tactile"] .btn-primary {
+  background: var(--t-accent);
+  color: #ffffff;
+}
+
+html[data-theme="tactile"] .btn-primary::after {
+  display: none;
+}
+
+html[data-theme="tactile"] .btn-primary:hover {
+  background: var(--t-accent-hover);
+  box-shadow: 0 10px 24px rgba(238, 114, 63, 0.35);
+  transform: translateY(-2px);
+}
+
+html[data-theme="tactile"] .btn-ghost {
+  background: var(--t-dark-elevated);
+  color: var(--t-text-light);
+  border: 1px solid var(--t-border-dark);
+}
+
+html[data-theme="tactile"] .btn-ghost:hover {
+  background: var(--t-dark-pill);
+  box-shadow: none;
+  transform: translateY(-2px);
+}
+
+/* Hero Stats — Tactile Dark Bento Cards */
+html[data-theme="tactile"] .hero-stats {
+  border-top: 1px solid var(--t-border-dark);
+  padding-top: 32px;
+  margin-top: 48px;
+  gap: 18px;
+}
+
+html[data-theme="tactile"] .stat {
+  background: var(--t-dark-elevated);
+  border: 1px solid var(--t-border-dark);
+  border-radius: 24px;
+  padding: 22px 24px;
+  transition: transform 0.25s ease, border-color 0.25s ease;
+}
+
+html[data-theme="tactile"] .stat:hover {
+  transform: translateY(-3px);
+  border-color: rgba(238, 114, 63, 0.45);
+}
+
+html[data-theme="tactile"] .stat::before {
+  display: none;
+}
+
+html[data-theme="tactile"] .stat-n {
+  font-family: var(--t-font);
+  font-size: 2rem;
+  font-weight: 800;
+  color: var(--t-text-light);
+}
+
+html[data-theme="tactile"] .stat-l {
+  font-family: var(--t-font);
+  color: var(--t-accent);
+  font-weight: 600;
+  text-transform: none;
+  font-size: 0.85rem;
+  margin-top: 4px;
+  display: block;
+}
+
+html[data-theme="tactile"] .scroll-hint {
+  font-family: var(--t-font);
+  text-transform: none;
+  color: var(--t-text-light-muted);
+  font-weight: 500;
+  bottom: 16px;
+}
+
+/* ===== SECTIONS ===== */
+html[data-theme="tactile"] section {
+  padding: 96px 0;
+}
+
+html[data-theme="tactile"] .section-header {
+  border-left: none;
+  padding-left: 0;
+  margin-bottom: 44px;
+}
+
+html[data-theme="tactile"] .section-tag {
+  display: inline-block;
+  font-family: var(--t-font);
+  font-size: 0.82rem;
+  font-weight: 700;
+  color: var(--t-accent);
+  background: var(--t-accent-soft);
+  padding: 6px 16px;
+  border-radius: 9999px;
+  margin-bottom: 12px;
+}
+
+html[data-theme="tactile"] .section-tag::before {
+  display: none;
+}
+
+html[data-theme="tactile"] .section-header h2 {
+  font-size: clamp(2.1rem, 4vw, 3.1rem);
+  font-weight: 800;
+  color: var(--t-text-dark);
+  text-shadow: none;
+}
+
+html[data-theme="tactile"] .section-sub {
+  color: var(--t-text-dark-muted);
+  font-size: 1.05rem;
+  margin-top: 10px;
+}
+
+/* ===== PROJECTS (WARM CREAM SHEET + WHITE SQUIRCLE CARDS) ===== */
+html[data-theme="tactile"] #projects {
+  background: var(--t-light);
+}
+
+html[data-theme="tactile"] .filter-bar {
+  gap: 10px;
+  margin-bottom: 36px;
+}
+
+html[data-theme="tactile"] .filter-btn {
+  clip-path: none;
+  border-radius: 9999px;
+  font-family: var(--t-font);
+  font-weight: 600;
+  font-size: 0.88rem;
+  text-transform: none;
+  background: var(--t-light-card);
+  color: var(--t-text-dark-muted);
+  border: 1px solid var(--t-border-light);
+  padding: 10px 20px;
+  box-shadow: var(--t-shadow-sm);
+}
+
+html[data-theme="tactile"] .filter-btn:hover {
+  color: var(--t-text-dark);
+  border-color: rgba(31, 28, 26, 0.2);
+  background: #ffffff;
+  box-shadow: var(--t-shadow-md);
+}
+
+html[data-theme="tactile"] .filter-btn.active {
+  background: var(--t-dark);
+  color: var(--t-text-light);
+  border-color: var(--t-dark);
+  box-shadow: 0 8px 20px rgba(35, 32, 29, 0.2);
+}
+
+html[data-theme="tactile"] .projects-grid {
+  gap: 24px;
+}
+
+html[data-theme="tactile"] .project-card {
+  clip-path: none;
+  border-radius: 28px;
+  background: var(--t-light-card);
+  border: 1px solid var(--t-border-light);
+  padding: 28px;
+  box-shadow: var(--t-shadow-sm);
+}
+
+html[data-theme="tactile"] .project-card::before {
+  display: none;
+}
+
+html[data-theme="tactile"] .project-card:hover {
+  background: #ffffff;
+  border-color: rgba(238, 114, 63, 0.4);
+  box-shadow: var(--t-shadow-md);
+  transform: translateY(-5px);
+}
+
+html[data-theme="tactile"] .project-card.featured {
+  border-color: rgba(238, 114, 63, 0.28);
+}
+
+html[data-theme="tactile"] .project-card.featured:hover {
+  border-color: var(--t-accent);
+  box-shadow: 0 14px 32px rgba(238, 114, 63, 0.14);
+}
+
+html[data-theme="tactile"] .card-emoji {
+  filter: none;
+  font-size: 2rem;
+  width: 52px;
+  height: 52px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--t-light);
+  border-radius: 50%;
+}
+
+html[data-theme="tactile"] .badge {
+  border-radius: 9999px;
+  font-family: var(--t-font);
+  font-weight: 600;
+  font-size: 0.72rem;
+  padding: 5px 12px;
+  background: var(--t-light-sub);
+  color: var(--t-text-dark);
+  border: none;
+}
+
+html[data-theme="tactile"] .badge-green,
+html[data-theme="tactile"] .badge-purple,
+html[data-theme="tactile"] .badge-blue,
+html[data-theme="tactile"] .badge-yellow {
+  background: var(--t-light-sub);
+  color: var(--t-text-dark);
+}
+
+html[data-theme="tactile"] .project-card.featured .badge:first-child {
+  background: var(--t-accent-soft);
+  color: var(--t-accent);
+}
+
+html[data-theme="tactile"] .project-card h3 {
+  color: var(--t-text-dark);
+  font-weight: 700;
+  font-size: 1.25rem;
+}
+
+html[data-theme="tactile"] .project-card p {
+  color: var(--t-text-dark-muted);
+  font-size: 0.95rem;
+}
+
+html[data-theme="tactile"] .card-tags {
+  font-family: var(--t-font);
+  font-size: 0.82rem;
+  font-weight: 500;
+  color: var(--t-text-dark-muted);
+  border-top: 1px solid var(--t-border-light);
+  padding-top: 14px;
+}
+
+html[data-theme="tactile"] .card-link {
+  font-family: var(--t-font);
+  font-weight: 600;
+  text-transform: none;
+  color: var(--t-text-dark);
+  background: var(--t-light);
+  padding: 9px 18px;
+  border-radius: 9999px;
+  font-size: 0.85rem;
+}
+
+html[data-theme="tactile"] .card-link:hover {
+  background: var(--t-dark);
+  color: #ffffff;
+  text-shadow: none;
+}
+
+html[data-theme="tactile"] .btn-play {
+  border-radius: 9999px;
+  background: var(--t-accent);
+  border: none;
+  color: #ffffff;
+  font-family: var(--t-font);
+  font-weight: 600;
+  text-transform: none;
+  padding: 10px 20px;
+  font-size: 0.86rem;
+}
+
+html[data-theme="tactile"] .btn-play:hover {
+  background: var(--t-accent-hover);
+  color: #ffffff;
+  box-shadow: 0 8px 20px rgba(238, 114, 63, 0.35);
+}
+
+/* ===== EXPERIENCE (DARK CHARCOAL ROUNDED SECTION) ===== */
+html[data-theme="tactile"] #experience {
+  background: var(--t-dark);
+  border-radius: 44px;
+  color: var(--t-text-light);
+  margin: 0 12px;
+  box-shadow: var(--t-shadow-dark);
+}
+
+html[data-theme="tactile"] #experience .section-header h2 {
+  color: var(--t-text-light);
+}
+
+html[data-theme="tactile"] .timeline::before {
+  background: rgba(255, 255, 255, 0.12);
+}
+
+html[data-theme="tactile"] .tl-dot {
+  border-radius: 50%;
+  transform: none;
+  background: var(--t-accent);
+  border: 3px solid var(--t-dark);
+  box-shadow: 0 0 0 4px var(--t-accent-soft);
+  width: 16px;
+  height: 16px;
+  left: -7px;
+  top: 28px;
+}
+
+html[data-theme="tactile"] .tl-content {
+  background: var(--t-dark-elevated);
+  border: 1px solid var(--t-border-dark);
+  border-radius: 28px;
+  padding: 30px;
+}
+
+html[data-theme="tactile"] .tl-content::before {
+  display: none;
+}
+
+html[data-theme="tactile"] .tl-header {
+  border-bottom: 1px solid var(--t-border-dark);
+}
+
+html[data-theme="tactile"] .tl-role {
+  color: var(--t-text-light);
+  font-weight: 700;
+}
+
+html[data-theme="tactile"] .tl-company {
+  font-family: var(--t-font);
+  color: var(--t-accent);
+  font-weight: 600;
+}
+
+html[data-theme="tactile"] .tl-date {
+  font-family: var(--t-font);
+  font-weight: 600;
+  background: var(--t-dark-pill);
+  color: var(--t-text-light);
+  border-radius: 9999px;
+  padding: 6px 16px;
+}
+
+html[data-theme="tactile"] .tl-bullets li {
+  color: var(--t-text-light-muted);
+}
+
+html[data-theme="tactile"] .tl-bullets li::before {
+  content: '•';
+  color: var(--t-accent);
+  font-weight: 700;
+}
+
+html[data-theme="tactile"] .tl-bullets li strong {
+  color: var(--t-text-light);
+  font-weight: 600;
+}
+
+html[data-theme="tactile"] .tl-stack {
+  font-family: var(--t-font);
+  color: var(--t-text-light-muted);
+  background: rgba(255, 255, 255, 0.04);
+  padding: 10px 16px;
+  border-radius: 9999px;
+  display: inline-block;
+}
+
+/* ===== SKILLS & CERTS (WARM CREAM + WHITE PILL CARDS) ===== */
+html[data-theme="tactile"] #skills {
+  background: var(--t-light);
+}
+
+html[data-theme="tactile"] .skills-grid {
+  gap: 24px;
+}
+
+html[data-theme="tactile"] .skill-group {
+  background: var(--t-light-card);
+  border: 1px solid var(--t-border-light);
+  border-radius: 28px;
+  padding: 28px;
+  box-shadow: var(--t-shadow-sm);
+}
+
+html[data-theme="tactile"] .skill-group::before,
+html[data-theme="tactile"] .skill-group::after {
+  display: none;
+}
+
+html[data-theme="tactile"] .skill-group h4 {
+  color: var(--t-text-dark);
+  font-weight: 700;
+  font-size: 1.05rem;
+  border-bottom: 1px solid var(--t-border-light);
+}
+
+html[data-theme="tactile"] .pill {
+  font-family: var(--t-font);
+  font-weight: 600;
+  font-size: 0.84rem;
+  border-radius: 9999px;
+  background: var(--t-light);
+  border: 1px solid var(--t-border-light);
+  color: var(--t-text-dark);
+  padding: 7px 14px;
+  transition: all 0.2s ease;
+}
+
+html[data-theme="tactile"] .pill:hover {
+  background: var(--t-accent);
+  color: #ffffff;
+  border-color: var(--t-accent);
+  transform: translateY(-1px);
+}
+
+html[data-theme="tactile"] .cert-card {
+  background: var(--t-light-card);
+  border: 1px solid var(--t-border-light);
+  border-radius: 24px;
+  padding: 22px;
+  box-shadow: var(--t-shadow-sm);
+}
+
+html[data-theme="tactile"] .cert-card:hover {
+  background: #ffffff;
+  border-color: var(--t-accent);
+  box-shadow: var(--t-shadow-md);
+  transform: translateY(-3px);
+}
+
+html[data-theme="tactile"] .cert-icon {
+  width: 52px;
+  height: 52px;
+  border-radius: 50%;
+  background: var(--t-accent-soft);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  font-size: 1.5rem;
+}
+
+html[data-theme="tactile"] .cert-title {
+  font-family: var(--t-font);
+  font-weight: 700;
+  color: var(--t-text-dark);
+}
+
+html[data-theme="tactile"] .cert-sub {
+  font-family: var(--t-font);
+  color: var(--t-accent);
+  font-weight: 600;
+}
+
+/* ===== CONTACT & FOOTER ===== */
+html[data-theme="tactile"] #contact {
+  background: var(--t-dark);
+  border-radius: 44px 44px 0 0;
+  color: var(--t-text-light);
+}
+
+html[data-theme="tactile"] #contact .section-header h2 {
+  color: var(--t-text-light);
+}
+
+html[data-theme="tactile"] #contact .section-sub {
+  color: var(--t-text-light-muted);
+  margin-left: auto;
+  margin-right: auto;
+}
+
+html[data-theme="tactile"] .contact-card {
+  background: var(--t-dark-elevated);
+  border: 1px solid var(--t-border-dark);
+  border-radius: 28px;
+  padding: 30px 22px;
+}
+
+html[data-theme="tactile"] .contact-card:hover {
+  background: var(--t-dark-pill);
+  border-color: var(--t-accent);
+  transform: translateY(-4px);
+}
+
+html[data-theme="tactile"] .contact-icon {
+  filter: none;
+  font-size: 1.8rem;
+  width: 58px;
+  height: 58px;
+  border-radius: 50%;
+  background: var(--t-accent-soft);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+html[data-theme="tactile"] .contact-label {
+  font-family: var(--t-font);
+  font-weight: 600;
+  color: var(--t-accent);
+}
+
+html[data-theme="tactile"] .contact-value {
+  font-family: var(--t-font);
+  color: var(--t-text-light);
+  font-weight: 600;
+}
+
+html[data-theme="tactile"] footer {
+  background: var(--t-dark);
+  border-top: 1px solid var(--t-border-dark);
+  font-family: var(--t-font);
+  color: var(--t-text-light-muted);
+}
+
+html[data-theme="tactile"] footer strong {
+  color: var(--t-text-light);
+}
+
+html[data-theme="tactile"] footer a {
+  color: var(--t-accent);
+}
+
+html[data-theme="tactile"] footer a:hover {
+  color: var(--t-accent-hover);
+  text-shadow: none;
+}
+
+/* ===== MODALS (GAMES & ATTENDANCE) ===== */
+html[data-theme="tactile"] .game-overlay,
+html[data-theme="tactile"] .attendance-overlay {
+  background: rgba(24, 21, 19, 0.78);
+  backdrop-filter: blur(12px);
+}
+
+html[data-theme="tactile"] .game-modal,
+html[data-theme="tactile"] .attendance-modal {
+  background: var(--t-dark);
+  border: 1px solid var(--t-border-dark);
+  border-radius: 32px;
+  box-shadow: var(--t-shadow-dark);
+  color: var(--t-text-light);
+}
+
+html[data-theme="tactile"] .game-modal::before,
+html[data-theme="tactile"] .attendance-modal::before {
+  display: none;
+}
+
+html[data-theme="tactile"] .game-modal-header {
+  border-bottom: 1px solid var(--t-border-dark);
+}
+
+html[data-theme="tactile"] .game-title {
+  font-family: var(--t-font);
+  font-weight: 700;
+  text-transform: none;
+  color: var(--t-text-light);
+}
+
+html[data-theme="tactile"] .game-close {
+  border-radius: 50%;
+  background: var(--t-dark-elevated);
+  border: 1px solid var(--t-border-dark);
+  color: var(--t-text-light);
+  font-family: var(--t-font);
+}
+
+html[data-theme="tactile"] .game-close:hover {
+  background: var(--t-accent);
+  border-color: var(--t-accent);
+  color: #ffffff;
+}
+
+html[data-theme="tactile"] #gameCanvas {
+  border-radius: 20px;
+  border: 1px solid var(--t-border-dark);
+  box-shadow: none;
+}
+
+html[data-theme="tactile"] .attendance-video-wrap {
+  border-radius: 24px;
+  border: 1px solid var(--t-border-dark);
+  box-shadow: none;
+}
+
+html[data-theme="tactile"] .attendance-status {
+  background: rgba(35, 32, 29, 0.85);
+  color: var(--t-accent);
+  font-family: var(--t-font);
+  font-weight: 600;
+}
+
+html[data-theme="tactile"] .attendance-log-list {
+  border-radius: 20px;
+  border: 1px solid var(--t-border-dark);
+  background: var(--t-dark-elevated);
+  font-family: var(--t-font);
+}
+
+html[data-theme="tactile"] .game-restart-btn {
+  border-radius: 9999px;
+  background: var(--t-dark-elevated);
+  border: 1px solid var(--t-border-dark);
+  color: var(--t-text-light);
+  font-family: var(--t-font);
+  font-weight: 600;
+}
+
+html[data-theme="tactile"] .game-restart-btn:hover {
+  background: var(--t-accent);
+  border-color: var(--t-accent);
+  color: #ffffff;
+}
+
+html[data-theme="tactile"] .game-score-label {
+  font-family: var(--t-font);
+  color: var(--t-text-light-muted);
+}
+
+html[data-theme="tactile"] .game-score-label span {
+  color: var(--t-accent);
+  font-weight: 700;
+}
+
+html[data-theme="tactile"] .quiz-input {
+  border-radius: 9999px;
+  background: var(--t-dark-elevated);
+  border: 1px solid var(--t-border-dark);
+  color: var(--t-text-light);
+  font-family: var(--t-font);
+  padding: 12px 20px;
+}
+
+html[data-theme="tactile"] .quiz-input:focus {
+  border-color: var(--t-accent);
+  box-shadow: 0 0 0 3px var(--t-accent-soft);
+}
+
+html[data-theme="tactile"] .quiz-giveup-btn {
+  border-radius: 9999px;
+  background: var(--t-dark-pill);
+  border: 1px solid var(--t-border-dark);
+  color: var(--t-text-light);
+  font-family: var(--t-font);
+  padding: 12px 20px;
+}
+
+html[data-theme="tactile"] .dpad-btn {
+  border-radius: 50%;
+  background: var(--t-dark-elevated);
+  border: 1px solid var(--t-border-dark);
+  color: var(--t-text-light);
+}
+
+html[data-theme="tactile"] .dpad-btn:active {
+  background: var(--t-accent);
+  color: #ffffff;
+}
+
+@media (max-width: 768px) {
+  html[data-theme="tactile"] #hero {
+    border-radius: 0 0 32px 32px;
+  }
+  html[data-theme="tactile"] #experience {
+    border-radius: 32px;
+    margin: 0 6px;
+  }
+  html[data-theme="tactile"] #contact {
+    border-radius: 32px 32px 0 0;
+  }
+  html[data-theme="tactile"] .theme-toggle-label {
+    display: none;
+  }
+  html[data-theme="tactile"] .theme-toggle {
+    padding: 5px;
+  }
+}
+
